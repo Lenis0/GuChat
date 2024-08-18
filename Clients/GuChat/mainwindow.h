@@ -2,10 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
+#include "logindialog.h"
+#include "registerdialog.h"
+
 /******************************************************************************
  *
  * @File       mainwindow.h
- * @Brief      简要介绍
+ * @Brief      主窗口
  *
  * @Author     Lenis0
  * @Date       2024/08/18
@@ -23,8 +27,11 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+public slots:
+    void SlotSwitchReg();
 private:
     Ui::MainWindow *ui;
+    LoginDialog *_login_dlg;
+    RegisterDialog *_reg_dlg;
 };
 #endif // MAINWINDOW_H

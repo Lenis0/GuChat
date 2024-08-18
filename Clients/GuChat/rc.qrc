@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/gugu.jpg</file>
+        <file>style/stylesheet.qss</file>
+    </qresource>
+</RCC>
