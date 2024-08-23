@@ -1,6 +1,6 @@
 #include "LogicSystem.h"
 #include "HttpConnection.h"
-
+#include "VerifyCodeGrpcClient.h"
 LogicSystem::~LogicSystem() {
 }
 
@@ -59,8 +59,9 @@ LogicSystem::LogicSystem() {
 		}
 
 		auto email = src_root["email"].asString();
+		GetVerifyCodeRsp rsp = VerifyCodeGrpcClient::GetInstance()->GetVerifyCode(email);
 		std::cout << "email is " << email << std::endl;
-		root["error"] = 0;
+		root["error"] = rsp.error();
 		root["email"] = src_root["email"];
 		std::string json_str = root.toStyledString();
 		beast::ostream(connection->_response.body()) << json_str;
