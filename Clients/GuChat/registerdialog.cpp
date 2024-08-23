@@ -29,7 +29,7 @@ void RegisterDialog::on_verify_btn_clicked() {
         //发送http请求获取验证码
         QJsonObject json_obj;
         json_obj["email"] = email;
-        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix+"/get_verifycode"),
+        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/get_verifycode"),
                                             json_obj,
                                             ReqId::ID_GET_VERIFY_CODE,
                                             Modules::REGISTERMOD);

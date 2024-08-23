@@ -6,6 +6,7 @@ GetVerifyCodeRsp VerifyCodeGrpcClient::GetVerifyCode(std::string email) {
 		GetVerifyCodeReq request;
 		GetVerifyCodeRsp response;
 
+		request.set_email(email);
 		Status status = _stub->GetVerifyCode(&context, request, &response);
 
 		if (status.ok()) {
@@ -18,7 +19,7 @@ GetVerifyCodeRsp VerifyCodeGrpcClient::GetVerifyCode(std::string email) {
 }
 
 VerifyCodeGrpcClient::VerifyCodeGrpcClient() {
-	std::shared_ptr<Channel> channel = grpc::CreateChannel("0.0.0.0:50051",
+	std::shared_ptr<Channel> channel = grpc::CreateChannel("127.0.0.1:50051",
 		grpc::InsecureChannelCredentials());
 	_stub = VerifyCodeService::NewStub(channel);
 }
