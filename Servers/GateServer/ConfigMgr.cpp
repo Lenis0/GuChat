@@ -13,6 +13,7 @@ SectionInfo& SectionInfo::operator=(const SectionInfo& src) {
 		return *this;
 	}
 	this->_section_datas = src._section_datas;
+	return *this;
 }
 
 std::string SectionInfo::operator[](const std::string& key) {
@@ -70,12 +71,17 @@ ConfigMgr& ConfigMgr::operator=(const ConfigMgr& src) {
 	if (&src == this) {
 		return *this;
 	}
-
 	this->_config_map = src._config_map;
+	return *this;
 }
 
 ConfigMgr::~ConfigMgr() {
 	_config_map.clear();
+}
+
+ConfigMgr& ConfigMgr::Inst() {
+	static ConfigMgr config_mgr;
+	return config_mgr;
 }
 
 SectionInfo ConfigMgr::operator[](const std::string& key) {

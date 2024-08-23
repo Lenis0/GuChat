@@ -2,7 +2,7 @@
 #include "ConfigMgr.h"
 
 int main() {
-	ConfigMgr gConfigMgr;
+	auto& gConfigMgr = ConfigMgr::Inst();
 	std::string gate_port_str = gConfigMgr["GateServer"]["Port"];
 	unsigned short gate_port = atoi(gate_port_str.c_str());
 	try {

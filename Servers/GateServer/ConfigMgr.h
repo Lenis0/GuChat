@@ -13,13 +13,13 @@ struct SectionInfo {
 
 class ConfigMgr {
 public:
-	ConfigMgr();
 	ConfigMgr(const ConfigMgr& src);
 	ConfigMgr& operator=(const ConfigMgr& src);
 	~ConfigMgr();
-
+	static ConfigMgr& Inst();
 	SectionInfo operator[] (const std::string& key);
 private:
+	ConfigMgr();
 	// ´æ´¢sectionºÍkey-value¶ÔµÄmap
 	std::map<std::string, SectionInfo> _config_map;
 };
