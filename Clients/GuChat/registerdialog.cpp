@@ -27,7 +27,12 @@ void RegisterDialog::on_verify_btn_clicked() {
     bool match = regex.match(email).hasMatch(); // 执行正则表达式匹配
     if (match) {
         //发送http请求获取验证码
-        showTip(true, tr("邮箱地址正确"));
+        QJsonObject json_obj;
+        json_obj["email"] = email;
+        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix+"/get_verifycode"),
+                                            json_obj,
+                                            ReqId::ID_GET_VERIFY_CODE,
+                                            Modules::REGISTERMOD);
     } else {
         //提示邮箱不正确
         showTip(false, tr("邮箱地址不正确"));
@@ -63,7 +68,7 @@ void RegisterDialog::initHttpHandlers() {
 
         auto email = jsonObj["email"].toString();
         showTip(true, tr("验证码已发送到邮箱，请注意查收"));
-        qDebug() << "email is " << email;
+        qDebug() << "email is" << email;
     });
 }
 

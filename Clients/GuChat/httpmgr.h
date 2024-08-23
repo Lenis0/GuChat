@@ -16,11 +16,11 @@ class HttpMgr :
     Q_OBJECT // 信号和槽需要的宏
 public:
     ~HttpMgr(); // Singleton的智能指针的析构需要调用该析构 所以需要公有
+    void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
 private:
     friend class Singleton<HttpMgr>;
     HttpMgr();
     QNetworkAccessManager _manager;
-    void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
 private slots:
     void slot_http_finish(ReqId id, QString res, ErrorCodes err, Modules mod);
 signals:

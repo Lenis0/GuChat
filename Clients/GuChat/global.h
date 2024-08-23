@@ -1,7 +1,9 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 #include <QByteArray>
+#include <QDir>
 #include <QRegularExpression>
+#include <QSettings>
 #include <QStyle>
 #include <QWidget>
 #include <functional>
@@ -13,6 +15,8 @@
  * @brief 重刷新qss
  */
 extern std::function<void(QWidget *)> repolish;
+
+extern QString gate_url_prefix;
 
 enum ReqId {
     ID_GET_VERIFY_CODE = 1001, // 获取验证码
