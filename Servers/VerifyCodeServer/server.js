@@ -3,11 +3,30 @@ const message_proto = require('./proto')
 const const_module = require('./const')
 const { v4: uuidv4 } = require('uuid')
 const emailModule = require('./email')
+const redis_module = require('./redis')
+
 
 async function GetVerifyCode(call, callback) {
     console.log("email is ", call.request.email)
     try {
-        uniqueId = uuidv4();
+        let query_res = await redis_module.GetRedis(const_module.code_prefix + call.request.email);
+        console.log("query_res is ", query_res)
+        let uniqueId = query_res;
+        if (query_res == null) {
+            uniqueId = uuidv4();
+            if (uniqueId.length > 4) {
+                uniqueId = uniqueId.substring(0, 4);
+            }
+            let bres = await redis_module.SetRedisExpire(const_module.code_prefix + call.request.email, uniqueId, 600)
+            if (!bres) {
+                callback(null, {
+                    email: call.request.email,
+                    error: const_module.Errors.RedisErr
+                });
+                return;
+            }
+        }
+
         console.log("uniqueId is ", uniqueId)
         let html_str = "您的验证码是：<h2>" + uniqueId
             + "</h2><br />请您在十分钟内输入验证码，继续完成后续注册操作。<br />"
