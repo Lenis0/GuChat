@@ -22,9 +22,9 @@ GetVerifyCodeRsp VerifyCodeGrpcClient::GetVerifyCode(std::string email) {
 }
 
 VerifyCodeGrpcClient::VerifyCodeGrpcClient() {
-	auto& gCfgMgr = ConfigMgr::Inst();
-	std::string host = gCfgMgr["VerifyCodeServer"]["Host"];
-	std::string port = gCfgMgr["VerifyCodeServer"]["Port"];
+	auto& gConfigMgr = ConfigMgr::Inst();
+	std::string host = gConfigMgr["VerifyCodeServer"]["Host"];
+	std::string port = gConfigMgr["VerifyCodeServer"]["Port"];
 	_pool.reset(new RPCConPool(5, host, port));
 }
 
