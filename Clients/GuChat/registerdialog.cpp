@@ -20,7 +20,7 @@ RegisterDialog::~RegisterDialog() {
     delete ui;
 }
 
-void RegisterDialog::on_verify_btn_clicked() {
+void RegisterDialog::on_verifycode_btn_clicked() {
     auto email = ui->email_edit->text();
     // 邮箱地址的正则表达式
     QRegularExpression regex(R"((\w+)(\.|_)?(\w*)@(\w+)(\.(\w+))+)");
@@ -70,6 +70,16 @@ void RegisterDialog::initHttpHandlers() {
         showTip(true, tr("验证码已发送到邮箱，请注意查收"));
         qDebug() << "email is" << email;
     });
+
+    //注册注册用户回包逻辑
+    _handlers.insert(ReqId::ID_REG_USER, [this](QJsonObject jsonObj){
+        int error = jsonObj["error"].toInt();
+        if(error != ErrorCodes::SUCCESS){
+            showTip(false, tr("参数错误"));
+            return;
+        }
+        showTip(true, tr("用户注册成功"));
+    });
 }
 
 void RegisterDialog::showTip(bool ok, QString str) {
@@ -81,3 +91,48 @@ void RegisterDialog::showTip(bool ok, QString str) {
     }
     repolish(ui->err_tip);
 }
+
+void RegisterDialog::on_confirm_btn_clicked() {
+    if (ui->user_edit->text() == "") {
+        showTip(false, tr("用户名不能为空"));
+        return;
+    }
+
+    if (ui->email_edit->text() == "") {
+        showTip(false, tr("邮箱不能为空"));
+        return;
+    }
+
+    if (ui->passwd_edit->text() == "") {
+        showTip(false, tr("密码不能为空"));
+        return;
+    }
+
+    if (ui->repasswd_edit->text() == "") {
+        showTip(false, tr("确认密码不能为空"));
+        return;
+    }
+
+    if (ui->repasswd_edit->text() != ui->passwd_edit->text()) {
+        showTip(false, tr("密码和确认密码不匹配"));
+        return;
+    }
+
+    if (ui->verifycode_edit->text() == "") {
+        showTip(false, tr("验证码不能为空"));
+        return;
+    }
+
+    //发送http请求注册用户
+    QJsonObject json_obj;
+    json_obj["user"] = ui->user_edit->text();
+    json_obj["email"] = ui->email_edit->text();
+    json_obj["passwd"] = ui->passwd_edit->text();
+    json_obj["repasswd"] = ui->repasswd_edit->text();
+    json_obj["verifycode"] = ui->verifycode_edit->text();
+    HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/user_register"),
+                                        json_obj,
+                                        ReqId::ID_REG_USER,
+                                        Modules::REGISTERMOD);
+}
+

@@ -42,12 +42,17 @@ async function GetVerifyCode(call, callback) {
 
         let send_res = await emailModule.SendMail(mailOptions);
         console.log("send res is ", send_res)
-
+        if (!send_res) {
+            callback(null, {
+                email: call.request.email,
+                error: const_module.Errors.Exception
+            });
+            return;
+        }
         callback(null, {
             email: call.request.email,
             error: const_module.Errors.Success
         });
-
 
     } catch (error) {
         console.log("catch error is ", error)
