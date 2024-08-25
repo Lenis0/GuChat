@@ -79,6 +79,7 @@ void RegisterDialog::initHttpHandlers() {
             return;
         }
         showTip(true, tr("用户注册成功"));
+        qDebug() << "user uid is" << jsonObj["uid"].toString();
     });
 }
 

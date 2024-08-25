@@ -21,7 +21,7 @@ void HttpConnection::Start() {
 			self->CheckDeadline();
 
 		} catch (std::exception& exp) {
-			std::cout << "exception is" << exp.what() << std::endl;
+			std::cout << "exception is " << exp.what() << std::endl;
 		}
 	});
 }
