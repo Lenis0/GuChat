@@ -16,6 +16,11 @@
  */
 extern std::function<void(QWidget *)> repolish;
 
+/**
+ * @brief 密码加密
+ */
+extern std::function<QString(QString)> xorString;
+
 extern QString gate_url_prefix;
 
 enum ReqId {
@@ -32,5 +37,21 @@ enum ErrorCodes {
     ERR_JSON = 1,    // Json解析失败
     ERR_NETWORK = 2, // 网络错误
 };
+
+enum TipErr{
+    TIP_SUCCESS = 0,
+    TIP_USER_ERR = 1,
+    TIP_EMAIL_ERR = 2,
+    TIP_PWD_ERR = 3,
+    TIP_REPWD_ERR = 4,
+    TIP_VERIFYCODE_ERR = 5,
+    TIP_CONFIRM_ERR = 6,
+};
+
+enum ClickLabelState{
+    Normal = 0,
+    Selected = 1
+};
+
 
 #endif // GLOBAL_H

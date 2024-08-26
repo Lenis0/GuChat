@@ -21,7 +21,7 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
@@ -29,6 +29,7 @@ public:
     ~MainWindow();
 public slots:
     void slot_switch_reg();
+
 private:
     Ui::MainWindow *ui;
     LoginDialog *_login_dlg;

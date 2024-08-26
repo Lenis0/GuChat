@@ -8,7 +8,7 @@ protected:
     Singleton(const Singleton<T>&) = delete;            // 拷贝构造
     Singleton& operator=(const Singleton<T>&) = delete; // 拷贝赋值
     // 类的static变量 一定要被初始化
-    static std::shared_ptr<T> _instance;                // 智能指针 （自动回收）
+    static std::shared_ptr<T> _instance; // 智能指针 （自动回收）
 
 public:
     static std::shared_ptr<T> GetInstance() {

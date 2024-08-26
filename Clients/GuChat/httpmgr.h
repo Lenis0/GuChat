@@ -9,7 +9,7 @@
 #include <QUrl> // 路由
 #include "singleton.h"
 // CRTP 奇异递归模版
-class HttpMgr :
+class HttpMgr:
     public QObject,
     public Singleton<HttpMgr>,
     public std::enable_shared_from_this<HttpMgr> {
@@ -17,6 +17,7 @@ class HttpMgr :
 public:
     ~HttpMgr(); // Singleton的智能指针的析构需要调用该析构 所以需要公有
     void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
+
 private:
     friend class Singleton<HttpMgr>;
     HttpMgr();
