@@ -32,6 +32,14 @@ private:
 	std::thread _check_thread;
 };
 
+struct UserInfo {
+	std::string name;
+	std::string pwd;
+	int uid;
+	std::string email;
+};
+
+
 class MysqlDao {
 public:
 	MysqlDao();

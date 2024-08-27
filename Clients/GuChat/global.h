@@ -14,7 +14,7 @@
 /**
  * @brief 重刷新qss
  */
-extern std::function<void(QWidget *)> repolish;
+extern std::function<void(QWidget*)> repolish;
 
 /**
  * @brief 密码加密
@@ -26,10 +26,16 @@ extern QString gate_url_prefix;
 enum ReqId {
     ID_GET_VERIFY_CODE = 1001, // 获取验证码
     ID_REG_USER = 1002,        // 注册用户
+    ID_RESET_PASSWD = 1003,    //重置密码
+    ID_LOGIN_USER = 1004,      //用户登录
+
 };
 
 enum Modules {
     REGISTERMOD = 0, // 注册模块
+    RESETMOD = 1,    // 重置密码模块
+    LOGINMOD = 2,    // 登录模块
+
 };
 
 enum ErrorCodes {
@@ -38,20 +44,23 @@ enum ErrorCodes {
     ERR_NETWORK = 2, // 网络错误
 };
 
-enum TipErr{
+enum TipErr {
     TIP_SUCCESS = 0,
     TIP_USER_ERR = 1,
     TIP_EMAIL_ERR = 2,
-    TIP_PWD_ERR = 3,
-    TIP_REPWD_ERR = 4,
-    TIP_VERIFYCODE_ERR = 5,
-    TIP_CONFIRM_ERR = 6,
+    TIP_PASSWD_LENGTH_ERR = 3,
+    TIP_PASSWD_CHAR_ERR = 4,
+    TIP_REPASSWD_ERR = 5,
+    TIP_VERIFYCODE_ERR = 6,
 };
 
-enum ClickLabelState{
-    Normal = 0,
-    Selected = 1
-};
+enum ClickLabelState { Normal = 0, Selected = 1 };
 
+struct ServerInfo {
+    QString Host;
+    QString Port;
+    QString Token;
+    int Uid;
+};
 
 #endif // GLOBAL_H

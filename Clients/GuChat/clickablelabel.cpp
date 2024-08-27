@@ -2,7 +2,10 @@
 #include <QMouseEvent>
 
 ClickableLabel::ClickableLabel(QWidget* parent):
-    QLabel(parent), _cur_state(ClickLabelState::Normal) {}
+    QLabel(parent), _cur_state(ClickLabelState::Normal) {
+    this->setCursor(Qt::PointingHandCursor);
+
+}
 
 // 处理鼠标点击事件
 void ClickableLabel::mousePressEvent(QMouseEvent* event) {

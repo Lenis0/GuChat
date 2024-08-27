@@ -6,9 +6,9 @@ QDialog#LoginDialog, #RegisterDialog {
     color : black;
 }
 
-#LoginDialog > #forget_label {
+/*#LoginDialog > #forget_label {
     color : blue;
-}
+}*/
 
 #err_tip[state='normal'] {
     color : green;

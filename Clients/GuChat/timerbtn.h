@@ -8,7 +8,7 @@ class TimerBtn: public QPushButton {
 public:
     TimerBtn(QWidget* parent = nullptr);
     ~TimerBtn();
-    void mouseReleaseEvent(QMouseEvent *e) override; // 重写mouseReleaseEvent
+    void mouseReleaseEvent(QMouseEvent* e) override; // 重写mouseReleaseEvent
 
 private:
     QTimer* _timer;

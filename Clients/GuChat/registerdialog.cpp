@@ -1,5 +1,4 @@
 #include "registerdialog.h"
-#include "global.h"
 #include "httpmgr.h"
 #include "ui_registerdialog.h"
 
@@ -97,36 +96,35 @@ void RegisterDialog::initHttpHandlers() {
     // 注册获取验证码回包的逻辑
     // 这里可以捕获this 因为可以保证该回调函数在dialog的生命周期中
     _handlers.insert(ReqId::ID_GET_VERIFY_CODE, [this](const QJsonObject& jsonObj) {
-        int error = jsonObj["error"].toInt();
-        if (error != ErrorCodes::SUCCESS) {
+        if (jsonObj["error"].toInt() != ErrorCodes::SUCCESS) {
             showTip(false, "参数错误");
             return;
         }
 
-        auto email = jsonObj["email"].toString();
         showTip(true, tr("验证码已发送到邮箱，请注意查收"));
-        qDebug() << "email is" << email;
+        qDebug() << "email is" << jsonObj["email"].toString();
+        return;
     });
 
     //注册注册用户回包逻辑
     _handlers.insert(ReqId::ID_REG_USER, [this](QJsonObject jsonObj) {
-        int error = jsonObj["error"].toInt();
-        if (error != ErrorCodes::SUCCESS) {
+        if (jsonObj["error"].toInt() != ErrorCodes::SUCCESS) {
             showTip(false, tr("参数错误"));
             return;
         }
         showTip(true, tr("用户注册成功"));
         qDebug() << "user uid is" << jsonObj["uid"].toString();
         switchTipPage();
+        return;
     });
 }
 
 void RegisterDialog::initTipErr() {
-    AddTipErr(TipErr::TIP_VERIFYCODE_ERR, tr("验证码不能为空"));
-    AddTipErr(TipErr::TIP_REPWD_ERR, tr("密码和确认密码不匹配"));
-    AddTipErr(TipErr::TIP_PWD_ERR, tr("密码长度应为5~15"));
-    AddTipErr(TipErr::TIP_EMAIL_ERR, tr("邮箱地址不正确"));
-    AddTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
+    addTipErr(TipErr::TIP_VERIFYCODE_ERR, tr("验证码不能为空"));
+    addTipErr(TipErr::TIP_REPASSWD_ERR, tr("密码和确认密码不匹配"));
+    addTipErr(TipErr::TIP_PASSWD_LENGTH_ERR, tr("密码长度应为5~15"));
+    addTipErr(TipErr::TIP_EMAIL_ERR, tr("邮箱地址不正确"));
+    addTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
 }
 
 void RegisterDialog::switchTipPage() {
@@ -147,13 +145,13 @@ void RegisterDialog::showTip(bool ok, QString str) {
     repolish(ui->err_tip);
 }
 
-void RegisterDialog::AddTipErr(TipErr te, QString tips) {
+void RegisterDialog::addTipErr(TipErr te, QString tips) {
     _tip_errs[te] = tips;
     ui->confirm_btn->setEnabled(false);
     showTip(false, tips);
 }
 
-void RegisterDialog::DelTipErr(TipErr te) {
+void RegisterDialog::delTipErr(TipErr te) {
     _tip_errs.remove(te);
     if (_tip_errs.empty()) {
         ui->err_tip->clear();
@@ -165,12 +163,12 @@ void RegisterDialog::DelTipErr(TipErr te) {
 }
 
 bool RegisterDialog::checkUserValid(const QString& user) {
-    if (user == "") {
-        AddTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
+    if (user.isEmpty()) {
+        addTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
         return false;
     }
 
-    DelTipErr(TipErr::TIP_USER_ERR);
+    delTipErr(TipErr::TIP_USER_ERR);
     return true;
 }
 
@@ -180,11 +178,12 @@ bool RegisterDialog::checkEmailValid(const QString& email) {
     bool match = regex.match(email).hasMatch(); // 执行正则表达式匹配
     if (!match) {
         //提示邮箱不正确
-        AddTipErr(TipErr::TIP_EMAIL_ERR, tr("邮箱地址不正确"));
+        addTipErr(TipErr::TIP_EMAIL_ERR, tr("邮箱地址不正确"));
         ui->verifycode_btn->setEnabled(false);
         return false;
     }
-    DelTipErr(TipErr::TIP_EMAIL_ERR);
+    delTipErr(TipErr::TIP_EMAIL_ERR);
+    ui->verifycode_btn->setEnabled(true);
     return true;
 }
 
@@ -193,9 +192,11 @@ bool RegisterDialog::checkPasswdValid(const QString& passwd) {
 
     if (passwd.length() < 5 || passwd.length() > 15) {
         //提示长度不准确
-        AddTipErr(TipErr::TIP_PWD_ERR, tr("密码长度应为5~15"));
+        addTipErr(TipErr::TIP_PASSWD_LENGTH_ERR, tr("密码长度必须为5~15"));
         return false;
     }
+
+    delTipErr(TipErr::TIP_PASSWD_LENGTH_ERR);
 
     // 创建一个正则表达式对象，按照上述密码要求
     // 这个正则表达式解释：
@@ -204,18 +205,18 @@ bool RegisterDialog::checkPasswdValid(const QString& passwd) {
     bool match = regExp.match(passwd).hasMatch();
     if (!match) {
         //提示字符非法
-        AddTipErr(TipErr::TIP_PWD_ERR, tr("不能包含非法字符"));
+        addTipErr(TipErr::TIP_PASSWD_CHAR_ERR, tr("不能包含非法字符"));
         return false;
     }
 
-    DelTipErr(TipErr::TIP_PWD_ERR);
+    delTipErr(TipErr::TIP_PASSWD_CHAR_ERR);
 
     if (passwd != repasswd) {
         //提示密码不匹配
-        AddTipErr(TipErr::TIP_REPWD_ERR, tr("密码和确认密码不匹配"));
+        addTipErr(TipErr::TIP_REPASSWD_ERR, tr("密码和确认密码不匹配"));
         return false;
     } else {
-        DelTipErr(TipErr::TIP_REPWD_ERR);
+        delTipErr(TipErr::TIP_REPASSWD_ERR);
     }
 
     return true;
@@ -223,42 +224,23 @@ bool RegisterDialog::checkPasswdValid(const QString& passwd) {
 bool RegisterDialog::checkRepasswdValid(const QString& repasswd) {
     auto passwd = ui->passwd_edit->text();
 
-    if (repasswd.length() < 5 || repasswd.length() > 15) {
-        //提示长度不准确
-        AddTipErr(TipErr::TIP_PWD_ERR, tr("密码长度应为5~15"));
-        return false;
-    }
-
-    // 创建一个正则表达式对象，按照上述密码要求
-    // 这个正则表达式解释：
-    // ^[a-zA-Z0-9!@#$%^&*]{5,15}$ 密码长度至少5，可以是字母、数字和特定的特殊字符
-    static QRegularExpression regExp("^[a-zA-Z0-9!@#$%^&*.]{5,15}$");
-    bool match = regExp.match(repasswd).hasMatch();
-    if (!match) {
-        //提示字符非法
-        AddTipErr(TipErr::TIP_PWD_ERR, tr("不能包含非法字符"));
-        return false;
-    }
-
-    DelTipErr(TipErr::TIP_PWD_ERR);
-
     if (passwd != repasswd) {
         //提示密码不匹配
-        AddTipErr(TipErr::TIP_REPWD_ERR, tr("密码和确认密码不匹配"));
+        addTipErr(TipErr::TIP_REPASSWD_ERR, tr("密码和确认密码不匹配"));
         return false;
     } else {
-        DelTipErr(TipErr::TIP_REPWD_ERR);
+        delTipErr(TipErr::TIP_REPASSWD_ERR);
     }
     return true;
 }
 
 bool RegisterDialog::checkVerifyCodeValid(const QString& code) {
     if (code.isEmpty()) {
-        AddTipErr(TipErr::TIP_VERIFYCODE_ERR, tr("验证码不能为空"));
+        addTipErr(TipErr::TIP_VERIFYCODE_ERR, tr("验证码不能为空"));
         return false;
     }
 
-    DelTipErr(TipErr::TIP_VERIFYCODE_ERR);
+    delTipErr(TipErr::TIP_VERIFYCODE_ERR);
     return true;
 }
 
@@ -311,9 +293,7 @@ void RegisterDialog::on_user_edit_textChanged(const QString& user) {
 }
 
 void RegisterDialog::on_email_edit_textChanged(const QString& email) {
-    if (checkEmailValid(email)) {
-        ui->verifycode_btn->setEnabled(true);
-    }
+    checkEmailValid(email);
 }
 
 void RegisterDialog::on_passwd_edit_textChanged(const QString& passwd) {
