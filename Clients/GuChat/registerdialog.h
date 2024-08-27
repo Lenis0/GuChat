@@ -32,9 +32,14 @@ private slots:
 
     void on_verifycode_edit_textChanged(const QString& arg1);
 
+    void on_cancel_btn_clicked();
+
+    void on_return_btn_clicked();
+
 private:
     void initHttpHandlers();
     void initTipErr();
+    void switchTipPage();
     void showTip(bool, QString);
     void AddTipErr(TipErr te, QString tips);
     void DelTipErr(TipErr te);
@@ -47,6 +52,11 @@ private:
     Ui::RegisterDialog* ui;
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
     QMap<TipErr, QString> _tip_errs;
+
+    QTimer* _countdown_timer;
+    int _countdown;
+signals:
+    void sig_switch_login(QString user);
 };
 
 #endif // REGISTERDIALOG_H

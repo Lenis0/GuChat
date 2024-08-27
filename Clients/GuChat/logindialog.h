@@ -11,11 +11,12 @@ class LoginDialog: public QDialog {
     Q_OBJECT
 
 public:
-    explicit LoginDialog(QWidget *parent = nullptr);
+    explicit LoginDialog(QWidget* parent = nullptr);
+    explicit LoginDialog(QString user, QWidget* parent = nullptr);
     ~LoginDialog();
 
 private:
-    Ui::LoginDialog *ui;
+    Ui::LoginDialog* ui;
 signals:
     void sig_switch_reg();
 };

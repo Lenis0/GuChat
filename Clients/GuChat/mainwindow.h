@@ -29,7 +29,7 @@ public:
     ~MainWindow();
 public slots:
     void slot_switch_reg();
-
+    void slot_switch_login(QString user);
 private:
     Ui::MainWindow *ui;
     LoginDialog *_login_dlg;

@@ -3,25 +3,26 @@
 #include "httpmgr.h"
 #include "ui_registerdialog.h"
 
-RegisterDialog::RegisterDialog(QWidget* parent): QDialog(parent), ui(new Ui::RegisterDialog) {
+RegisterDialog::RegisterDialog(QWidget* parent):
+    QDialog(parent), ui(new Ui::RegisterDialog), _countdown(5) {
     ui->setupUi(this);
     ui->passwd_edit->setEchoMode(QLineEdit::Password);
     ui->repasswd_edit->setEchoMode(QLineEdit::Password);
     ui->err_tip->setProperty("state", "normal");
     repolish(ui->err_tip);
     ui->verifycode_btn->setEnabled(false);
+    ui->confirm_btn->setEnabled(false);
     connect(HttpMgr::GetInstance().get(),
             &HttpMgr::sig_reg_mod_finish,
             this,
             &RegisterDialog::slot_reg_mod_finish);
     initHttpHandlers();
     initTipErr();
-
     ui->passwd_visible->SetState("unvisible", "unvisible_hover", "", "visible", "visible_hover", "");
     ui->repasswd_visible
         ->SetState("unvisible", "unvisible_hover", "", "visible", "visible_hover", "");
 
-    //连接点击事件
+    // 连接点击事件
     connect(ui->passwd_visible, &ClickableLabel::sig_clicked, this, [this]() {
         auto state = ui->passwd_visible->GetCurState();
         if (state == ClickLabelState::Normal) {
@@ -39,6 +40,19 @@ RegisterDialog::RegisterDialog(QWidget* parent): QDialog(parent), ui(new Ui::Reg
         }
     });
 
+    // 创建定时器
+    _countdown_timer = new QTimer(this);
+    // 连接信号和槽
+    connect(_countdown_timer, &QTimer::timeout, this, [this]() {
+        --_countdown;
+        auto str = QString("恭喜你！注册成功！%1秒后返回登录界面。").arg(_countdown);
+        ui->tip_label->setText(str);
+        if (_countdown <= 0) {
+            _countdown_timer->stop();
+            emit sig_switch_login(ui->user_edit->text());
+            return;
+        }
+    });
 }
 
 RegisterDialog::~RegisterDialog() {
@@ -103,6 +117,7 @@ void RegisterDialog::initHttpHandlers() {
         }
         showTip(true, tr("用户注册成功"));
         qDebug() << "user uid is" << jsonObj["uid"].toString();
+        switchTipPage();
     });
 }
 
@@ -112,6 +127,14 @@ void RegisterDialog::initTipErr() {
     AddTipErr(TipErr::TIP_PWD_ERR, tr("密码长度应为5~15"));
     AddTipErr(TipErr::TIP_EMAIL_ERR, tr("邮箱地址不正确"));
     AddTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
+}
+
+void RegisterDialog::switchTipPage() {
+    // _countdown_timer->stop();
+    ui->stackedWidget->setCurrentWidget(ui->page_2);
+
+    // 启动定时器 间隔为1000毫秒
+    _countdown_timer->start(1000);
 }
 
 void RegisterDialog::showTip(bool ok, QString str) {
@@ -126,6 +149,7 @@ void RegisterDialog::showTip(bool ok, QString str) {
 
 void RegisterDialog::AddTipErr(TipErr te, QString tips) {
     _tip_errs[te] = tips;
+    ui->confirm_btn->setEnabled(false);
     showTip(false, tips);
 }
 
@@ -133,6 +157,7 @@ void RegisterDialog::DelTipErr(TipErr te) {
     _tip_errs.remove(te);
     if (_tip_errs.empty()) {
         ui->err_tip->clear();
+        ui->confirm_btn->setEnabled(true);
         return;
     }
 
@@ -151,7 +176,7 @@ bool RegisterDialog::checkUserValid(const QString& user) {
 
 bool RegisterDialog::checkEmailValid(const QString& email) {
     // 邮箱地址的正则表达式
-    QRegularExpression regex(R"((\w+)(\.|_)?(\w*)@(\w+)(\.(\w+))+)");
+    static QRegularExpression regex(R"((\w+)(\.|_)?(\w*)@(\w+)(\.(\w+))+)");
     bool match = regex.match(email).hasMatch(); // 执行正则表达式匹配
     if (!match) {
         //提示邮箱不正确
@@ -175,7 +200,7 @@ bool RegisterDialog::checkPasswdValid(const QString& passwd) {
     // 创建一个正则表达式对象，按照上述密码要求
     // 这个正则表达式解释：
     // ^[a-zA-Z0-9!@#$%^&*]{5,15}$ 密码长度至少5，可以是字母、数字和特定的特殊字符
-    QRegularExpression regExp("^[a-zA-Z0-9!@#$%^&*.]{5,15}$");
+    static QRegularExpression regExp("^[a-zA-Z0-9!@#$%^&*.]{5,15}$");
     bool match = regExp.match(passwd).hasMatch();
     if (!match) {
         //提示字符非法
@@ -207,7 +232,7 @@ bool RegisterDialog::checkRepasswdValid(const QString& repasswd) {
     // 创建一个正则表达式对象，按照上述密码要求
     // 这个正则表达式解释：
     // ^[a-zA-Z0-9!@#$%^&*]{5,15}$ 密码长度至少5，可以是字母、数字和特定的特殊字符
-    QRegularExpression regExp("^[a-zA-Z0-9!@#$%^&*.]{5,15}$");
+    static QRegularExpression regExp("^[a-zA-Z0-9!@#$%^&*.]{5,15}$");
     bool match = regExp.match(repasswd).hasMatch();
     if (!match) {
         //提示字符非法
@@ -238,35 +263,35 @@ bool RegisterDialog::checkVerifyCodeValid(const QString& code) {
 }
 
 void RegisterDialog::on_confirm_btn_clicked() {
-    if (ui->user_edit->text() == "") {
-        showTip(false, tr("用户名不能为空"));
-        return;
-    }
+    // if (ui->user_edit->text() == "") {
+    //     showTip(false, tr("用户名不能为空"));
+    //     return;
+    // }
 
-    if (ui->email_edit->text() == "") {
-        showTip(false, tr("邮箱不能为空"));
-        return;
-    }
+    // if (ui->email_edit->text() == "") {
+    //     showTip(false, tr("邮箱不能为空"));
+    //     return;
+    // }
 
-    if (ui->passwd_edit->text() == "") {
-        showTip(false, tr("密码不能为空"));
-        return;
-    }
+    // if (ui->passwd_edit->text() == "") {
+    //     showTip(false, tr("密码不能为空"));
+    //     return;
+    // }
 
-    if (ui->repasswd_edit->text() == "") {
-        showTip(false, tr("确认密码不能为空"));
-        return;
-    }
+    // if (ui->repasswd_edit->text() == "") {
+    //     showTip(false, tr("确认密码不能为空"));
+    //     return;
+    // }
 
-    if (ui->repasswd_edit->text() != ui->passwd_edit->text()) {
-        showTip(false, tr("密码和确认密码不匹配"));
-        return;
-    }
+    // if (ui->repasswd_edit->text() != ui->passwd_edit->text()) {
+    //     showTip(false, tr("密码和确认密码不匹配"));
+    //     return;
+    // }
 
-    if (ui->verifycode_edit->text() == "") {
-        showTip(false, tr("验证码不能为空"));
-        return;
-    }
+    // if (ui->verifycode_edit->text() == "") {
+    //     showTip(false, tr("验证码不能为空"));
+    //     return;
+    // }
 
     //发送http请求注册用户
     QJsonObject json_obj;
@@ -301,4 +326,13 @@ void RegisterDialog::on_repasswd_edit_textChanged(const QString& repasswd) {
 
 void RegisterDialog::on_verifycode_edit_textChanged(const QString& code) {
     checkVerifyCodeValid(code);
+}
+
+void RegisterDialog::on_cancel_btn_clicked() {
+    emit sig_switch_login("");
+}
+
+void RegisterDialog::on_return_btn_clicked() {
+    _countdown_timer->stop();
+    emit sig_switch_login(ui->user_edit->text());
 }
