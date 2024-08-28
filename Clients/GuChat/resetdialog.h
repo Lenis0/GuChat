@@ -25,9 +25,10 @@ private:
     void delTipErr(TipErr te);
     bool checkUserValid(const QString&);
     bool checkEmailValid(const QString&);
-    bool checkVerifyCodeValid(const QString&);
     bool checkNewPasswdValid(const QString&);
     bool checkRePasswdValid(const QString&);
+    bool checkVerifyCodeValid(const QString&);
+    void switchEnableWidget(bool);
 
     Ui::ResetDialog* ui;
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
@@ -53,6 +54,7 @@ private slots:
 
     void on_cancel_btn_clicked();
 
+    void on_verifycode_btn_clicked();
 };
 
 #endif // RESETDIALOG_H

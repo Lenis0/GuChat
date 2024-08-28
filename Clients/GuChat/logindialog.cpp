@@ -12,7 +12,7 @@ LoginDialog::LoginDialog(QWidget* parent): QDialog(parent), ui(new Ui::LoginDial
 
     initImg();
     initTipErr();
-
+    initHttpHandlers();
     connect(ui->reg_btn, &QPushButton::clicked, this, &LoginDialog::sig_switch_reg);
     connect(ui->forget_label, &ClickableLabel::sig_clicked, this, &LoginDialog::slot_forget_passwd);
 
@@ -32,6 +32,7 @@ LoginDialog::LoginDialog(QString user, QWidget* parent): QDialog(parent), ui(new
 
     initImg();
     initTipErr();
+    initHttpHandlers();
 
     connect(ui->reg_btn, &QPushButton::clicked, this, &LoginDialog::sig_switch_reg);
     connect(ui->forget_label, &ClickableLabel::sig_clicked, this, &LoginDialog::slot_forget_passwd);
@@ -78,16 +79,19 @@ void LoginDialog::initImg() {
 
 void LoginDialog::initTipErr() {
     addTipErr(TipErr::TIP_PASSWD_LENGTH_ERR, tr("密码长度必须为5~15"));
-    if (ui->user_edit->text().isEmpty()) addTipErr(TipErr::TIP_USER_ERR, "用户名不能为空");
+    if (ui->user_edit->text().isEmpty()) {
+        addTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
+    }
 }
 
 void LoginDialog::initHttpHandlers() {
     _handlers.insert(ReqId::ID_LOGIN_USER, [this](const QJsonObject& jsonObj) {
-        if (jsonObj["error"].toInt() != ErrorCodes::SUCCESS) {
-            showTip(false, "参数错误");
+        int error = jsonObj["error"].toInt();
+        if (error != ErrorCodes::SUCCESS) {
+            showTip(false, tr("参数错误"));
             return;
         }
-        showTip(true, "登录成功！");
+        showTip(true, tr("登录成功！"));
         ServerInfo si;
         si.Uid = jsonObj["uid"].toInt();
         si.Host = jsonObj["host"].toString();
@@ -103,7 +107,7 @@ void LoginDialog::initHttpHandlers() {
 
 bool LoginDialog::checkUserValid(const QString& user) {
     if (user.isEmpty()) {
-        addTipErr(TipErr::TIP_USER_ERR, "用户名不能为空");
+        addTipErr(TipErr::TIP_USER_ERR, tr("用户名不能为空"));
         return false;
     }
 
@@ -175,14 +179,14 @@ void LoginDialog::switchEnableWidget(bool state) {
 void LoginDialog::slot_log_mod_finish(ReqId id, QString res, ErrorCodes err) {
     switchEnableWidget(true);
     if (err != ErrorCodes::SUCCESS) {
-        showTip(false, "网络请求错误");
+        showTip(false, tr("网络请求错误"));
         return;
     }
 
     // 解析Json字符串 res转化为QByteArray
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8()); // .json文件
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        showTip(false, "Json解析失败");
+        showTip(false, tr("Json解析失败"));
         return;
     }
     _handlers[id](jsonDoc.object());
@@ -200,7 +204,7 @@ LoginDialog::~LoginDialog() {
 void LoginDialog::on_login_btn_clicked() {
     auto user = ui->user_edit->text();
     auto passwd = ui->passwd_edit->text();
-    showTip(true, "正在登录中...请稍后");
+    showTip(true, tr("正在登录中...请稍后"));
     switchEnableWidget(false);
     //发送http请求登录
     QJsonObject json_obj;

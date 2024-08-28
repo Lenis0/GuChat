@@ -11,7 +11,7 @@ TimerBtn::TimerBtn(QWidget* parent): QPushButton(parent), _counter(count) {
         if (_counter <= 0) {
             _timer->stop();
             _counter = count;
-            this->setText("获取");
+            this->setText(tr("获取"));
             this->setEnabled(true);
             return;
         }

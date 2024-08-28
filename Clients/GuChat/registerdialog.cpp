@@ -17,11 +17,11 @@ RegisterDialog::RegisterDialog(QWidget* parent):
             &RegisterDialog::slot_reg_mod_finish);
     initHttpHandlers();
     initTipErr();
+
+    // 显示/隐藏密码
     ui->passwd_visible->SetState("unvisible", "unvisible_hover", "", "visible", "visible_hover", "");
     ui->repasswd_visible
         ->SetState("unvisible", "unvisible_hover", "", "visible", "visible_hover", "");
-
-    // 连接点击事件
     connect(ui->passwd_visible, &ClickableLabel::sig_clicked, this, [this]() {
         auto state = ui->passwd_visible->GetCurState();
         if (state == ClickLabelState::Normal) {
@@ -44,7 +44,7 @@ RegisterDialog::RegisterDialog(QWidget* parent):
     // 连接信号和槽
     connect(_countdown_timer, &QTimer::timeout, this, [this]() {
         --_countdown;
-        auto str = QString("恭喜你！注册成功！%1秒后返回登录界面。").arg(_countdown);
+        auto str = QString(tr("恭喜你！注册成功！%1秒后返回登录界面。")).arg(_countdown);
         ui->tip_label->setText(str);
         if (_countdown <= 0) {
             _countdown_timer->stop();
@@ -64,27 +64,25 @@ void RegisterDialog::on_verifycode_btn_clicked() {
     // QRegularExpression regex(R"((\w+)(\.|_)?(\w*)@(\w+)(\.(\w+))+)");
     // bool match = regex.match(email).hasMatch(); // 执行正则表达式匹配
 
-    if (checkEmailValid(email)) {
-        //发送http请求获取验证码
-        QJsonObject json_obj;
-        json_obj["email"] = email;
-        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/get_verifycode"),
-                                            json_obj,
-                                            ReqId::ID_GET_VERIFY_CODE,
-                                            Modules::REGISTERMOD);
-    }
+    //发送http请求获取验证码
+    QJsonObject json_obj;
+    json_obj["email"] = email;
+    HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/get_verifycode"),
+                                        json_obj,
+                                        ReqId::ID_GET_VERIFY_CODE,
+                                        Modules::REGISTERMOD);
 }
 
 void RegisterDialog::slot_reg_mod_finish(ReqId id, QString res, ErrorCodes err) {
     if (err != ErrorCodes::SUCCESS) {
-        showTip(false, "网络请求错误");
+        showTip(false, tr("网络请求错误"));
         return;
     }
 
     // 解析Json字符串 res转化为QByteArray
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8()); // .json文件
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        showTip(false, "Json解析失败");
+        showTip(false, tr("Json解析失败"));
         return;
     }
 
@@ -96,19 +94,20 @@ void RegisterDialog::initHttpHandlers() {
     // 注册获取验证码回包的逻辑
     // 这里可以捕获this 因为可以保证该回调函数在dialog的生命周期中
     _handlers.insert(ReqId::ID_GET_VERIFY_CODE, [this](const QJsonObject& jsonObj) {
-        if (jsonObj["error"].toInt() != ErrorCodes::SUCCESS) {
-            showTip(false, "参数错误");
+        int error = jsonObj["error"].toInt();
+        if (error != ErrorCodes::SUCCESS) {
+            showTip(false, tr("参数错误"));
             return;
         }
 
         showTip(true, tr("验证码已发送到邮箱，请注意查收"));
-        qDebug() << "email is" << jsonObj["email"].toString();
         return;
     });
 
     //注册注册用户回包逻辑
     _handlers.insert(ReqId::ID_REG_USER, [this](QJsonObject jsonObj) {
-        if (jsonObj["error"].toInt() != ErrorCodes::SUCCESS) {
+        int error = jsonObj["error"].toInt();
+        if (error != ErrorCodes::SUCCESS) {
             showTip(false, tr("参数错误"));
             return;
         }
@@ -128,7 +127,7 @@ void RegisterDialog::initTipErr() {
 }
 
 void RegisterDialog::switchTipPage() {
-    // _countdown_timer->stop();
+    _countdown_timer->stop();
     ui->stackedWidget->setCurrentWidget(ui->page_2);
 
     // 启动定时器 间隔为1000毫秒
@@ -245,36 +244,6 @@ bool RegisterDialog::checkVerifyCodeValid(const QString& code) {
 }
 
 void RegisterDialog::on_confirm_btn_clicked() {
-    // if (ui->user_edit->text() == "") {
-    //     showTip(false, tr("用户名不能为空"));
-    //     return;
-    // }
-
-    // if (ui->email_edit->text() == "") {
-    //     showTip(false, tr("邮箱不能为空"));
-    //     return;
-    // }
-
-    // if (ui->passwd_edit->text() == "") {
-    //     showTip(false, tr("密码不能为空"));
-    //     return;
-    // }
-
-    // if (ui->repasswd_edit->text() == "") {
-    //     showTip(false, tr("确认密码不能为空"));
-    //     return;
-    // }
-
-    // if (ui->repasswd_edit->text() != ui->passwd_edit->text()) {
-    //     showTip(false, tr("密码和确认密码不匹配"));
-    //     return;
-    // }
-
-    // if (ui->verifycode_edit->text() == "") {
-    //     showTip(false, tr("验证码不能为空"));
-    //     return;
-    // }
-
     //发送http请求注册用户
     QJsonObject json_obj;
     json_obj["user"] = ui->user_edit->text();
@@ -309,6 +278,7 @@ void RegisterDialog::on_verifycode_edit_textChanged(const QString& code) {
 }
 
 void RegisterDialog::on_cancel_btn_clicked() {
+    _countdown_timer->stop();
     emit sig_switch_login("");
 }
 
