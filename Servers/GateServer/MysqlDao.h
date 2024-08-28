@@ -47,6 +47,7 @@ public:
 	int RegUser(const std::string& name, const std::string& email, const std::string& pwd);
 	bool CheckEmail(const std::string& name, const std::string& email);
 	bool UpdatePasswd(const std::string& name, const std::string& newpwd);
+	bool CheckPasswd(const std::string& name, const std::string& pwd, UserInfo& userInfo);
 private:
 	std::unique_ptr<MySqlPool> pool_;
 };
