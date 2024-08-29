@@ -38,7 +38,6 @@ private:
 class StatusGrpcClient:public Singleton<StatusGrpcClient> {
 	friend class Singleton<StatusGrpcClient>;
 public:
-	~StatusGrpcClient();
 	GetChatServerRsp GetChatServer(int uid);
 
 private:

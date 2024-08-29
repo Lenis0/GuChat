@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\Lenis0\WorkSpace\Tools\MySQL\Connector C++ 8.0.33 Debug\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Lenis0\WorkSpace\Tools\MySQL\Connector C++ 8.0.33 Debug\lib64\vs14\debug;D:\Lenis0\WorkSpace\Tools\MySQL\Connector C++ 8.0.33 Debug\lib64\vs14;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -108,7 +112,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mysqlcppconn.lib;mysqlcppconn8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(ProjectDir)config.ini  $(SolutionDir)$(Platform)\$(Configuration)\   /y
+xcopy $(ProjectDir)*.dll   $(SolutionDir)$(Platform)\$(Configuration)\   /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -127,7 +136,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AsioIOContextPool.cpp" />
+    <ClCompile Include="ConfigMgr.cpp" />
+    <ClCompile Include="message.grpc.pb.cc" />
+    <ClCompile Include="message.pb.cc" />
+    <ClCompile Include="MysqlDao.cpp" />
+    <ClCompile Include="MysqlMgr.cpp" />
+    <ClCompile Include="RedisMgr.cpp" />
     <ClCompile Include="StatusServer.cpp" />
+    <ClCompile Include="StatusServiceImpl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AsioIOContextPool.h" />
+    <ClInclude Include="ConfigMgr.h" />
+    <ClInclude Include="const.h" />
+    <ClInclude Include="message.grpc.pb.h" />
+    <ClInclude Include="message.pb.h" />
+    <ClInclude Include="MysqlDao.h" />
+    <ClInclude Include="MysqlMgr.h" />
+    <ClInclude Include="RedisMgr.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StatusServiceImpl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
+    <None Include="message.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

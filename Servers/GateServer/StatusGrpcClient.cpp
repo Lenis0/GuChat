@@ -49,10 +49,6 @@ void StatusConPool::Close() {
 	cond_.notify_all();
 }
 
-StatusGrpcClient::~StatusGrpcClient() {
-
-}
-
 GetChatServerRsp StatusGrpcClient::GetChatServer(int uid) {
 	ClientContext context;
 	GetChatServerRsp reply;
