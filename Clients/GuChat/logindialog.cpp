@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include "httpmgr.h"
+#include "tcpmgr.h"
 #include "ui_logindialog.h"
 
 LoginDialog::LoginDialog(QWidget* parent): QDialog(parent), ui(new Ui::LoginDialog) {
@@ -21,6 +22,21 @@ LoginDialog::LoginDialog(QWidget* parent): QDialog(parent), ui(new Ui::LoginDial
             &HttpMgr::sig_log_mod_finish,
             this,
             &LoginDialog::slot_log_mod_finish);
+    //连接tcp连接请求的信号和槽函数
+    connect(this,
+            &LoginDialog::sig_connect_tcp,
+            TcpMgr::GetInstance().get(),
+            &TcpMgr::slot_tcp_connect);
+    //连接tcp管理者发出的连接成功信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_con_success,
+            this,
+            &LoginDialog::slot_tcp_con_finish);
+    //连接tcp管理者发出的登陆失败信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_login_failed,
+            this,
+            &LoginDialog::slot_login_failed);
 }
 
 LoginDialog::LoginDialog(QString user, QWidget* parent): QDialog(parent), ui(new Ui::LoginDialog) {
@@ -36,11 +52,27 @@ LoginDialog::LoginDialog(QString user, QWidget* parent): QDialog(parent), ui(new
 
     connect(ui->reg_btn, &QPushButton::clicked, this, &LoginDialog::sig_switch_reg);
     connect(ui->forget_label, &ClickableLabel::sig_clicked, this, &LoginDialog::slot_forget_passwd);
+
     //连接登录回包信号
     connect(HttpMgr::GetInstance().get(),
             &HttpMgr::sig_log_mod_finish,
             this,
             &LoginDialog::slot_log_mod_finish);
+    //连接tcp连接请求的信号和槽函数
+    connect(this,
+            &LoginDialog::sig_connect_tcp,
+            TcpMgr::GetInstance().get(),
+            &TcpMgr::slot_tcp_connect);
+    //连接tcp管理者发出的连接成功信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_con_success,
+            this,
+            &LoginDialog::slot_tcp_con_finish);
+    //连接tcp管理者发出的登陆失败信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_login_failed,
+            this,
+            &LoginDialog::slot_login_failed);
 }
 
 void LoginDialog::initImg() {
@@ -85,6 +117,7 @@ void LoginDialog::initTipErr() {
 }
 
 void LoginDialog::initHttpHandlers() {
+    // 注册获取登录回包逻辑
     _handlers.insert(ReqId::ID_LOGIN_USER, [this](const QJsonObject& jsonObj) {
         int error = jsonObj["error"].toInt();
         if (error != ErrorCodes::SUCCESS) {
@@ -97,11 +130,12 @@ void LoginDialog::initHttpHandlers() {
         si.Host = jsonObj["host"].toString();
         si.Port = jsonObj["port"].toString();
         si.Token = jsonObj["token"].toString();
+        _uid = si.Uid;
+        _token = si.Token;
         auto email = jsonObj["email"].toString();
         qDebug() << "email is " << email << " uid is " << si.Uid << " host is " << si.Host
                  << " Port is " << si.Port << " Token is " << si.Token;
         emit sig_connect_tcp(si);
-        return;
     });
 }
 
@@ -177,9 +211,9 @@ void LoginDialog::switchEnableWidget(bool state) {
 }
 
 void LoginDialog::slot_log_mod_finish(ReqId id, QString res, ErrorCodes err) {
-    switchEnableWidget(true);
     if (err != ErrorCodes::SUCCESS) {
         showTip(false, tr("网络请求错误"));
+        switchEnableWidget(true);
         return;
     }
 
@@ -187,14 +221,41 @@ void LoginDialog::slot_log_mod_finish(ReqId id, QString res, ErrorCodes err) {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8()); // .json文件
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
         showTip(false, tr("Json解析失败"));
+        switchEnableWidget(true);
         return;
     }
+
     _handlers[id](jsonDoc.object());
     return;
 }
 
 void LoginDialog::slot_forget_passwd() {
     emit sig_switch_reset(ui->user_edit->text());
+}
+
+void LoginDialog::slot_tcp_con_finish(bool success) {
+    if (success) {
+        showTip(true, tr("聊天服务连接成功，正在登录..."));
+        QJsonObject jsonObj;
+        jsonObj["uid"] = _uid;
+        jsonObj["token"] = _token;
+
+        QJsonDocument doc(jsonObj);
+        QByteArray jsonData = doc.toJson(QJsonDocument::Indented);
+
+        //发送tcp请求给chat server
+        emit TcpMgr::GetInstance()->sig_send_data(ReqId::ID_CHAT_LOGIN, jsonData);
+
+    } else {
+        showTip(false, tr("网络异常"));
+        switchEnableWidget(true);
+    }
+}
+
+void LoginDialog::slot_login_failed(int err) {
+    QString result = QString("登录失败, err is %1").arg(err);
+    showTip(false, result);
+    switchEnableWidget(true);
 }
 
 LoginDialog::~LoginDialog() {
@@ -204,7 +265,7 @@ LoginDialog::~LoginDialog() {
 void LoginDialog::on_login_btn_clicked() {
     auto user = ui->user_edit->text();
     auto passwd = ui->passwd_edit->text();
-    showTip(true, tr("正在登录中...请稍后"));
+    showTip(true, tr("正在连接聊天服务...请稍后"));
     switchEnableWidget(false);
     //发送http请求登录
     QJsonObject json_obj;

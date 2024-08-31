@@ -30,7 +30,8 @@ private:
     Ui::LoginDialog* ui;
     QMap<TipErr, QString> _tip_errs;
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
-
+    int _uid;
+    QString _token;
 signals:
     void sig_switch_reg();
     void sig_switch_reset(QString user);
@@ -38,6 +39,9 @@ signals:
 private slots:
     void slot_log_mod_finish(ReqId id, QString res, ErrorCodes err);
     void slot_forget_passwd();
+    void slot_tcp_con_finish(bool success);
+    void slot_login_failed(int);
+
     void on_login_btn_clicked();
     void on_user_edit_textChanged(const QString& user);
     void on_passwd_edit_textChanged(const QString& passwd);
