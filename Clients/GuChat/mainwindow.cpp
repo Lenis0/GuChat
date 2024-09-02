@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(_login_dlg, &LoginDialog::sig_switch_reg, this, &MainWindow::slot_switch_reg);
     //连接登录界面忘记密码信号
     connect(_login_dlg, &LoginDialog::sig_switch_reset, this, &MainWindow::slot_switch_reset);
+    //连接创建聊天界面信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_swich_chat,
+            this,
+            &MainWindow::slot_switch_chat);
+    emit TcpMgr::GetInstance() -> sig_swich_chat();
 }
 
 MainWindow::~MainWindow() {
@@ -74,4 +80,14 @@ void MainWindow::slot_reset_switch_login(QString user) {
     connect(_login_dlg, &LoginDialog::sig_switch_reset, this, &MainWindow::slot_switch_reset);
     _reset_dlg->hide();
     _login_dlg->show();
+}
+
+void MainWindow::slot_switch_chat() {
+    _chat_dlg = new ChatDialog();
+    _chat_dlg->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    setCentralWidget(_chat_dlg);
+    _chat_dlg->show();
+    _login_dlg->hide();
+    this->setMinimumSize(QSize(1280, 720));
+    this->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }

@@ -67,10 +67,6 @@ QDialog#LoginDialog, #RegisterDialog {
    border-image: url(:/res/visible_hover.png);
 }
 
-#tip_lb, #tip2_lb{
-    color:green;
-}
-
 #forget_label[state='normal'],#forget_label[state='selected']{
     color:black;
 }
@@ -100,7 +96,20 @@ QDialog#LoginDialog, #RegisterDialog {
      background-color:rgb(247,247,247);
 }
 
+#search_edit {
+    border: 2px solid #f1f1f1;
+}
+
+#chat_user_wid{
+    background-color: rgb(0,0,0);
+}
+
 #chat_user_list {
+    background-color: rgb(247,247,248);
+    border: none;
+}
+
+ChatUserItemWidget {
     background-color: rgb(247,247,248);
     border: none;
 }
@@ -125,12 +134,6 @@ QDialog#LoginDialog, #RegisterDialog {
 #user_chat_lb{
     color:rgb(153,153,153);
     font-size: 14px;
-    font-family: "Microsoft YaHei";
-}
-
-#already_add_lb{
-    color:rgb(153,153,153);
-    font-size: 12px;
     font-family: "Microsoft YaHei";
 }
 
@@ -167,6 +170,12 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none; /* 页面滚动部分背景透明 */
+}
+
+#already_add_lb{
+    color:rgb(153,153,153);
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
 }
 
 LoadingDlg{
@@ -349,9 +358,6 @@ LoadingDlg{
 }
 
 
-#search_edit {
-    border: 2px solid #f1f1f1;
-}
 
 /* 搜索框列表*/
 #search_list {

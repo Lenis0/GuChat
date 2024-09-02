@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 
+#include "chatdialog.h"
 #include "logindialog.h"
 #include "registerdialog.h"
 #include "resetdialog.h"
+#include "tcpmgr.h"
 
 /******************************************************************************
  *
@@ -33,11 +35,13 @@ public slots:
     void slot_switch_login(QString user);
     void slot_switch_reset(QString user);
     void slot_reset_switch_login(QString user);
+    void slot_switch_chat();
 
 private:
     Ui::MainWindow* ui;
     LoginDialog* _login_dlg;
     RegisterDialog* _reg_dlg;
     ResetDialog* _reset_dlg;
+    ChatDialog* _chat_dlg;
 };
 #endif // MAINWINDOW_H
