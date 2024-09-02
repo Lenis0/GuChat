@@ -22,51 +22,6 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace message {
 
-inline constexpr LoginRsp::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : token_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        error_{0},
-        uid_{0},
-        _cached_size_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR LoginRsp::LoginRsp(::_pbi::ConstantInitialized)
-    : _impl_(::_pbi::ConstantInitialized()) {}
-struct LoginRspDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR LoginRspDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~LoginRspDefaultTypeInternal() {}
-  union {
-    LoginRsp _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
-
-inline constexpr LoginReq::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : token_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        uid_{0},
-        _cached_size_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR LoginReq::LoginReq(::_pbi::ConstantInitialized)
-    : _impl_(::_pbi::ConstantInitialized()) {}
-struct LoginReqDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR LoginReqDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~LoginReqDefaultTypeInternal() {}
-  union {
-    LoginReq _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LoginReqDefaultTypeInternal _LoginReq_default_instance_;
-
 inline constexpr GetVerifyCodeRsp::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : email_(
@@ -160,7 +115,7 @@ struct GetChatServerReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetChatServerReqDefaultTypeInternal _GetChatServerReq_default_instance_;
 }  // namespace message
-static ::_pb::Metadata file_level_metadata_message_2eproto[6];
+static ::_pb::Metadata file_level_metadata_message_2eproto[4];
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_message_2eproto = nullptr;
 static constexpr const ::_pb::ServiceDescriptor**
@@ -208,27 +163,6 @@ const ::uint32_t TableStruct_message_2eproto::offsets[] PROTOBUF_SECTION_VARIABL
     PROTOBUF_FIELD_OFFSET(::message::GetChatServerRsp, _impl_.host_),
     PROTOBUF_FIELD_OFFSET(::message::GetChatServerRsp, _impl_.port_),
     PROTOBUF_FIELD_OFFSET(::message::GetChatServerRsp, _impl_.token_),
-    ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::message::LoginReq, _internal_metadata_),
-    ~0u,  // no _extensions_
-    ~0u,  // no _oneof_case_
-    ~0u,  // no _weak_field_map_
-    ~0u,  // no _inlined_string_donated_
-    ~0u,  // no _split_
-    ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::message::LoginReq, _impl_.uid_),
-    PROTOBUF_FIELD_OFFSET(::message::LoginReq, _impl_.token_),
-    ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::message::LoginRsp, _internal_metadata_),
-    ~0u,  // no _extensions_
-    ~0u,  // no _oneof_case_
-    ~0u,  // no _weak_field_map_
-    ~0u,  // no _inlined_string_donated_
-    ~0u,  // no _split_
-    ~0u,  // no sizeof(Split)
-    PROTOBUF_FIELD_OFFSET(::message::LoginRsp, _impl_.error_),
-    PROTOBUF_FIELD_OFFSET(::message::LoginRsp, _impl_.uid_),
-    PROTOBUF_FIELD_OFFSET(::message::LoginRsp, _impl_.token_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -237,8 +171,6 @@ static const ::_pbi::MigrationSchema
         {9, -1, -1, sizeof(::message::GetVerifyCodeRsp)},
         {20, -1, -1, sizeof(::message::GetChatServerReq)},
         {29, -1, -1, sizeof(::message::GetChatServerRsp)},
-        {41, -1, -1, sizeof(::message::LoginReq)},
-        {51, -1, -1, sizeof(::message::LoginRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -246,8 +178,6 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::message::_GetVerifyCodeRsp_default_instance_._instance,
     &::message::_GetChatServerReq_default_instance_._instance,
     &::message::_GetChatServerRsp_default_instance_._instance,
-    &::message::_LoginReq_default_instance_._instance,
-    &::message::_LoginRsp_default_instance_._instance,
 };
 const char descriptor_table_protodef_message_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n\rmessage.proto\022\007message\"!\n\020GetVerifyCod"
@@ -255,28 +185,24 @@ const char descriptor_table_protodef_message_2eproto[] PROTOBUF_SECTION_VARIABLE
     "\r\n\005error\030\001 \001(\005\022\r\n\005email\030\002 \001(\t\022\014\n\004code\030\003 "
     "\001(\t\"\037\n\020GetChatServerReq\022\013\n\003uid\030\001 \001(\005\"L\n\020"
     "GetChatServerRsp\022\r\n\005error\030\001 \001(\005\022\014\n\004host\030"
-    "\002 \001(\t\022\014\n\004port\030\003 \001(\t\022\r\n\005token\030\004 \001(\t\"&\n\010Lo"
-    "ginReq\022\013\n\003uid\030\001 \001(\005\022\r\n\005token\030\002 \001(\t\"5\n\010Lo"
-    "ginRsp\022\r\n\005error\030\001 \001(\005\022\013\n\003uid\030\002 \001(\005\022\r\n\005to"
-    "ken\030\003 \001(\t2\\\n\021VerifyCodeService\022G\n\rGetVer"
-    "ifyCode\022\031.message.GetVerifyCodeReq\032\031.mes"
-    "sage.GetVerifyCodeRsp\"\0002\207\001\n\rStatusServic"
-    "e\022G\n\rGetChatServer\022\031.message.GetChatServ"
-    "erReq\032\031.message.GetChatServerRsp\"\000\022-\n\005Lo"
-    "gin\022\021.message.LoginReq\032\021.message.LoginRs"
-    "pb\006proto3"
+    "\002 \001(\t\022\014\n\004port\030\003 \001(\t\022\r\n\005token\030\004 \001(\t2\\\n\021Ve"
+    "rifyCodeService\022G\n\rGetVerifyCode\022\031.messa"
+    "ge.GetVerifyCodeReq\032\031.message.GetVerifyC"
+    "odeRsp\"\0002X\n\rStatusService\022G\n\rGetChatServ"
+    "er\022\031.message.GetChatServerReq\032\031.message."
+    "GetChatServerRsp\"\000b\006proto3"
 };
 static ::absl::once_flag descriptor_table_message_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_message_2eproto = {
     false,
     false,
-    569,
+    426,
     descriptor_table_protodef_message_2eproto,
     "message.proto",
     &descriptor_table_message_2eproto_once,
     nullptr,
     0,
-    6,
+    4,
     schemas,
     file_default_instances,
     TableStruct_message_2eproto::offsets,
@@ -1182,479 +1108,6 @@ void GetChatServerRsp::InternalSwap(GetChatServerRsp* PROTOBUF_RESTRICT other) {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_message_2eproto_getter, &descriptor_table_message_2eproto_once,
       file_level_metadata_message_2eproto[3]);
-}
-// ===================================================================
-
-class LoginReq::_Internal {
- public:
-};
-
-LoginReq::LoginReq(::google::protobuf::Arena* arena)
-    : ::google::protobuf::Message(arena) {
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:message.LoginReq)
-}
-inline PROTOBUF_NDEBUG_INLINE LoginReq::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from)
-      : token_(arena, from.token_),
-        _cached_size_{0} {}
-
-LoginReq::LoginReq(
-    ::google::protobuf::Arena* arena,
-    const LoginReq& from)
-    : ::google::protobuf::Message(arena) {
-  LoginReq* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
-  _impl_.uid_ = from._impl_.uid_;
-
-  // @@protoc_insertion_point(copy_constructor:message.LoginReq)
-}
-inline PROTOBUF_NDEBUG_INLINE LoginReq::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : token_(arena),
-        _cached_size_{0} {}
-
-inline void LoginReq::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.uid_ = {};
-}
-LoginReq::~LoginReq() {
-  // @@protoc_insertion_point(destructor:message.LoginReq)
-  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  SharedDtor();
-}
-inline void LoginReq::SharedDtor() {
-  ABSL_DCHECK(GetArena() == nullptr);
-  _impl_.token_.Destroy();
-  _impl_.~Impl_();
-}
-
-PROTOBUF_NOINLINE void LoginReq::Clear() {
-// @@protoc_insertion_point(message_clear_start:message.LoginReq)
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.token_.ClearToEmpty();
-  _impl_.uid_ = 0;
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-const char* LoginReq::_InternalParse(
-    const char* ptr, ::_pbi::ParseContext* ctx) {
-  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
-  return ptr;
-}
-
-
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 30, 2> LoginReq::_table_ = {
-  {
-    0,  // no _has_bits_
-    0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    &_LoginReq_default_instance_._instance,
-    ::_pbi::TcParser::GenericFallback,  // fallback
-  }, {{
-    // string token = 2;
-    {::_pbi::TcParser::FastUS1,
-     {18, 63, 0, PROTOBUF_FIELD_OFFSET(LoginReq, _impl_.token_)}},
-    // int32 uid = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LoginReq, _impl_.uid_), 63>(),
-     {8, 63, 0, PROTOBUF_FIELD_OFFSET(LoginReq, _impl_.uid_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // int32 uid = 1;
-    {PROTOBUF_FIELD_OFFSET(LoginReq, _impl_.uid_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
-    // string token = 2;
-    {PROTOBUF_FIELD_OFFSET(LoginReq, _impl_.token_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }},
-  // no aux_entries
-  {{
-    "\20\0\5\0\0\0\0\0"
-    "message.LoginReq"
-    "token"
-  }},
-};
-
-::uint8_t* LoginReq::_InternalSerialize(
-    ::uint8_t* target,
-    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:message.LoginReq)
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  // int32 uid = 1;
-  if (this->_internal_uid() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::
-        WriteInt32ToArrayWithField<1>(
-            stream, this->_internal_uid(), target);
-  }
-
-  // string token = 2;
-  if (!this->_internal_token().empty()) {
-    const std::string& _s = this->_internal_token();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "message.LoginReq.token");
-    target = stream->WriteStringMaybeAliased(2, _s, target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target =
-        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:message.LoginReq)
-  return target;
-}
-
-::size_t LoginReq::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:message.LoginReq)
-  ::size_t total_size = 0;
-
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string token = 2;
-  if (!this->_internal_token().empty()) {
-    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                    this->_internal_token());
-  }
-
-  // int32 uid = 1;
-  if (this->_internal_uid() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-        this->_internal_uid());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::google::protobuf::Message::ClassData LoginReq::_class_data_ = {
-    LoginReq::MergeImpl,
-    nullptr,  // OnDemandRegisterArenaDtor
-};
-const ::google::protobuf::Message::ClassData* LoginReq::GetClassData() const {
-  return &_class_data_;
-}
-
-void LoginReq::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
-  auto* const _this = static_cast<LoginReq*>(&to_msg);
-  auto& from = static_cast<const LoginReq&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:message.LoginReq)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_token().empty()) {
-    _this->_internal_set_token(from._internal_token());
-  }
-  if (from._internal_uid() != 0) {
-    _this->_internal_set_uid(from._internal_uid());
-  }
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void LoginReq::CopyFrom(const LoginReq& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:message.LoginReq)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-PROTOBUF_NOINLINE bool LoginReq::IsInitialized() const {
-  return true;
-}
-
-::_pbi::CachedSize* LoginReq::AccessCachedSize() const {
-  return &_impl_._cached_size_;
-}
-void LoginReq::InternalSwap(LoginReq* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.token_, &other->_impl_.token_, arena);
-        swap(_impl_.uid_, other->_impl_.uid_);
-}
-
-::google::protobuf::Metadata LoginReq::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_message_2eproto_getter, &descriptor_table_message_2eproto_once,
-      file_level_metadata_message_2eproto[4]);
-}
-// ===================================================================
-
-class LoginRsp::_Internal {
- public:
-};
-
-LoginRsp::LoginRsp(::google::protobuf::Arena* arena)
-    : ::google::protobuf::Message(arena) {
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:message.LoginRsp)
-}
-inline PROTOBUF_NDEBUG_INLINE LoginRsp::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from)
-      : token_(arena, from.token_),
-        _cached_size_{0} {}
-
-LoginRsp::LoginRsp(
-    ::google::protobuf::Arena* arena,
-    const LoginRsp& from)
-    : ::google::protobuf::Message(arena) {
-  LoginRsp* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
-  ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, error_),
-           reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, error_),
-           offsetof(Impl_, uid_) -
-               offsetof(Impl_, error_) +
-               sizeof(Impl_::uid_));
-
-  // @@protoc_insertion_point(copy_constructor:message.LoginRsp)
-}
-inline PROTOBUF_NDEBUG_INLINE LoginRsp::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : token_(arena),
-        _cached_size_{0} {}
-
-inline void LoginRsp::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, error_),
-           0,
-           offsetof(Impl_, uid_) -
-               offsetof(Impl_, error_) +
-               sizeof(Impl_::uid_));
-}
-LoginRsp::~LoginRsp() {
-  // @@protoc_insertion_point(destructor:message.LoginRsp)
-  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  SharedDtor();
-}
-inline void LoginRsp::SharedDtor() {
-  ABSL_DCHECK(GetArena() == nullptr);
-  _impl_.token_.Destroy();
-  _impl_.~Impl_();
-}
-
-PROTOBUF_NOINLINE void LoginRsp::Clear() {
-// @@protoc_insertion_point(message_clear_start:message.LoginRsp)
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.token_.ClearToEmpty();
-  ::memset(&_impl_.error_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.uid_) -
-      reinterpret_cast<char*>(&_impl_.error_)) + sizeof(_impl_.uid_));
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-const char* LoginRsp::_InternalParse(
-    const char* ptr, ::_pbi::ParseContext* ctx) {
-  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
-  return ptr;
-}
-
-
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 30, 2> LoginRsp::_table_ = {
-  {
-    0,  // no _has_bits_
-    0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    &_LoginRsp_default_instance_._instance,
-    ::_pbi::TcParser::GenericFallback,  // fallback
-  }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // int32 error = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LoginRsp, _impl_.error_), 63>(),
-     {8, 63, 0, PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.error_)}},
-    // int32 uid = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LoginRsp, _impl_.uid_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.uid_)}},
-    // string token = 3;
-    {::_pbi::TcParser::FastUS1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.token_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // int32 error = 1;
-    {PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.error_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
-    // int32 uid = 2;
-    {PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.uid_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
-    // string token = 3;
-    {PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.token_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }},
-  // no aux_entries
-  {{
-    "\20\0\0\5\0\0\0\0"
-    "message.LoginRsp"
-    "token"
-  }},
-};
-
-::uint8_t* LoginRsp::_InternalSerialize(
-    ::uint8_t* target,
-    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:message.LoginRsp)
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  // int32 error = 1;
-  if (this->_internal_error() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::
-        WriteInt32ToArrayWithField<1>(
-            stream, this->_internal_error(), target);
-  }
-
-  // int32 uid = 2;
-  if (this->_internal_uid() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::
-        WriteInt32ToArrayWithField<2>(
-            stream, this->_internal_uid(), target);
-  }
-
-  // string token = 3;
-  if (!this->_internal_token().empty()) {
-    const std::string& _s = this->_internal_token();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "message.LoginRsp.token");
-    target = stream->WriteStringMaybeAliased(3, _s, target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target =
-        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:message.LoginRsp)
-  return target;
-}
-
-::size_t LoginRsp::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:message.LoginRsp)
-  ::size_t total_size = 0;
-
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string token = 3;
-  if (!this->_internal_token().empty()) {
-    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                    this->_internal_token());
-  }
-
-  // int32 error = 1;
-  if (this->_internal_error() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-        this->_internal_error());
-  }
-
-  // int32 uid = 2;
-  if (this->_internal_uid() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-        this->_internal_uid());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::google::protobuf::Message::ClassData LoginRsp::_class_data_ = {
-    LoginRsp::MergeImpl,
-    nullptr,  // OnDemandRegisterArenaDtor
-};
-const ::google::protobuf::Message::ClassData* LoginRsp::GetClassData() const {
-  return &_class_data_;
-}
-
-void LoginRsp::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
-  auto* const _this = static_cast<LoginRsp*>(&to_msg);
-  auto& from = static_cast<const LoginRsp&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:message.LoginRsp)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_token().empty()) {
-    _this->_internal_set_token(from._internal_token());
-  }
-  if (from._internal_error() != 0) {
-    _this->_internal_set_error(from._internal_error());
-  }
-  if (from._internal_uid() != 0) {
-    _this->_internal_set_uid(from._internal_uid());
-  }
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void LoginRsp::CopyFrom(const LoginRsp& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:message.LoginRsp)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-PROTOBUF_NOINLINE bool LoginRsp::IsInitialized() const {
-  return true;
-}
-
-::_pbi::CachedSize* LoginRsp::AccessCachedSize() const {
-  return &_impl_._cached_size_;
-}
-void LoginRsp::InternalSwap(LoginRsp* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.token_, &other->_impl_.token_, arena);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.uid_)
-      + sizeof(LoginRsp::_impl_.uid_)
-      - PROTOBUF_FIELD_OFFSET(LoginRsp, _impl_.error_)>(
-          reinterpret_cast<char*>(&_impl_.error_),
-          reinterpret_cast<char*>(&other->_impl_.error_));
-}
-
-::google::protobuf::Metadata LoginRsp::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_message_2eproto_getter, &descriptor_table_message_2eproto_once,
-      file_level_metadata_message_2eproto[5]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace message

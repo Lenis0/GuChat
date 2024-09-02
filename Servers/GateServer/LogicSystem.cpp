@@ -265,7 +265,7 @@ LogicSystem::LogicSystem() {
 		}
 
 		std::cout << "succeed to load userinfo uid is " << userInfo.uid << std::endl;
-		root["error"] = 0;
+		root["error"] = ErrorCodes::Success;
 		root["email"] = userInfo.email;
 		root["uid"] = userInfo.uid;
 		root["token"] = reply.token();

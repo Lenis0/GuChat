@@ -7,6 +7,7 @@
 #include <QTcpSocket>
 #include "global.h"
 #include "singleton.h"
+#include "usermgr.h"
 
 class TcpMgr: public QObject, public Singleton<TcpMgr>, public std::enable_shared_from_this<TcpMgr> {
     Q_OBJECT

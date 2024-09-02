@@ -1,23 +1,26 @@
 #pragma once
-#include "const.h"
 #include "ConfigMgr.h"
+#include "const.h"
 #include <mysql/jdbc.h>
+#include <mutex>
+#include <queue>
+#include "data.h"
 
 class SqlConnection {
 public:
-    SqlConnection(sql::Connection* con, int64_t lasttime);
-    std::unique_ptr<sql::Connection> _con;
+	SqlConnection(sql::Connection* con, int64_t lasttime);
+	std::unique_ptr<sql::Connection> _con;
 	int64_t _last_oper_time;
 };
 
 class MySqlPool {
 public:
-    MySqlPool(const std::string& url, const std::string& user, const std::string& pass, const std::string& schema, int poolSize);
-    std::unique_ptr<SqlConnection> getConnection();
-    void checkConnection();
-    void reclaimConnection(std::unique_ptr<SqlConnection> con);
-    void Close();
-    ~MySqlPool();
+	MySqlPool(const std::string& url, const std::string& user, const std::string& pass, const std::string& schema, int poolSize);
+	std::unique_ptr<SqlConnection> getConnection();
+	void checkConnection();
+	void reclaimConnection(std::unique_ptr<SqlConnection> con);
+	void Close();
+	~MySqlPool();
 
 private:
 	std::string url_;
@@ -32,13 +35,6 @@ private:
 	std::thread _check_thread;
 };
 
-struct UserInfo {
-	std::string name;
-	std::string pwd;
-	int uid;
-	std::string email;
-};
-
 
 class MysqlDao {
 public:
@@ -48,6 +44,8 @@ public:
 	bool CheckEmail(const std::string& name, const std::string& email);
 	bool UpdatePasswd(const std::string& name, const std::string& newpwd);
 	bool CheckPasswd(const std::string& name, const std::string& pwd, UserInfo& userInfo);
+	std::shared_ptr<UserInfo> GetUser(int uid);
+	std::shared_ptr<UserInfo> GetUser(std::string name);
 private:
 	std::unique_ptr<MySqlPool> pool_;
 };

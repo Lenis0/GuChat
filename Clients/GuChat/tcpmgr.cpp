@@ -142,15 +142,15 @@ void TcpMgr::initHttpHandlers() {
             return;
         }
 
-        // auto uid = jsonObj["uid"].toInt();
-        // auto name = jsonObj["name"].toString();
-        // auto nickname = jsonObj["nickname"].toString();
-        // auto icon = jsonObj["icon"].toString();
-        // auto sex = jsonObj["sex"].toInt();
-        // auto user_info = std::make_shared<UserInfo>(uid, name, nickname, icon, sex);
+        auto uid = jsonObj["uid"].toInt();
+        auto name = jsonObj["name"].toString();
+        auto nickname = jsonObj["nickname"].toString();
+        auto icon = jsonObj["icon"].toString();
+        auto sex = jsonObj["sex"].toInt();
+        auto user_info = std::make_shared<UserInfo>(uid, name, nickname, icon, sex);
 
-        // UserMgr::GetInstance()->SetUserInfo(user_info);
-        // UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
+        UserMgr::GetInstance()->SetUserInfo(user_info);
+        UserMgr::GetInstance()->SetToken(jsonObj["token"].toString());
         // if (jsonObj.contains("apply_list")) {
         //     UserMgr::GetInstance()->AppendApplyList(jsonObj["apply_list"].toArray());
         // }
@@ -195,7 +195,7 @@ void TcpMgr::slot_send_data(ReqId reqId, QByteArray dataBytes) {
     QDataStream out(&block, QIODevice::WriteOnly);
 
     // 设置数据流使用网络字节序
-    out.setByteOrder(QDataStream::BigEndian);
+    out.setByteOrder(QDataStream::BigEndian); // 大端模式
 
     // 写入ID和长度
     out << id << len;

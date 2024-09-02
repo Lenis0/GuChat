@@ -122,6 +122,7 @@ void LoginDialog::initHttpHandlers() {
         int error = jsonObj["error"].toInt();
         if (error != ErrorCodes::SUCCESS) {
             showTip(false, tr("参数错误"));
+            switchEnableWidget(true);
             return;
         }
         showTip(true, tr("登录成功！"));

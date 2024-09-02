@@ -1,8 +1,6 @@
 ﻿#include "const.h"
 #include "ConfigMgr.h"
 #include "RedisMgr.h"
-#include "MysqlMgr.h"
-#include "AsioIOContextPool.h"
 #include "StatusServiceImpl.h"
 
 void RunServer() {
