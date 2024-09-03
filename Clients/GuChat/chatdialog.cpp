@@ -2,6 +2,7 @@
 #include <QAction>
 #include <QRandomGenerator>
 #include "chatuseritemwidget.h"
+#include "loadingdialog.h"
 #include "ui_chatdialog.h"
 
 ChatDialog::ChatDialog(QWidget* parent):
@@ -46,6 +47,11 @@ ChatDialog::ChatDialog(QWidget* parent):
     // 隐藏搜索list
     ShowSearch(false);
 
+    // 加载用户
+    connect(ui->chat_user_list,
+            &ChatUserList::sig_loading_chat_user,
+            this,
+            &ChatDialog::slot_loading_chat_user);
     AddChatUserList();
 }
 
@@ -73,7 +79,11 @@ void ChatDialog::ShowSearch(bool b_search) {
 }
 
 // 测试
-std::vector<QString> strs = {"Hello, World!", "hello world !", "爱你", "hello world", "HelloWorld"};
+std::vector<QString> strs = {"Hello, World!",
+                             "hellohellohellohellohello world !",
+                             "爱你",
+                             "hello world",
+                             "HelloWorld"};
 
 std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
 
@@ -95,4 +105,21 @@ void ChatDialog::AddChatUserList() {
         ui->chat_user_list->addItem(item);
         ui->chat_user_list->setItemWidget(item, chat_user_wid);
     }
+}
+
+void ChatDialog::slot_loading_chat_user() {
+    if (_b_loading) {
+        return;
+    }
+
+    _b_loading = true;
+    LoadingDialog* loadingDialog = new LoadingDialog(this);
+    loadingDialog->setModal(true);
+    loadingDialog->show();
+    qDebug() << "add new data to list.....";
+    AddChatUserList();
+    // 加载完成后关闭对话框
+    loadingDialog->deleteLater();
+
+    _b_loading = false;
 }

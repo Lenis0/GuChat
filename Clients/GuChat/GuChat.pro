@@ -12,13 +12,16 @@ CONFIG += c++17
 
 SOURCES += \
     chatdialog.cpp \
+    chatpage.cpp \
     chatuseritemwidget.cpp \
     chatuserlist.cpp \
+    chatview.cpp \
     clickablelabel.cpp \
     customedit.cpp \
     global.cpp \
     httpmgr.cpp \
     listitembase.cpp \
+    loadingdialog.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -32,13 +35,16 @@ SOURCES += \
 
 HEADERS += \
     chatdialog.h \
+    chatpage.h \
     chatuseritemwidget.h \
     chatuserlist.h \
+    chatview.h \
     clickablelabel.h \
     customedit.h \
     global.h \
     httpmgr.h \
     listitembase.h \
+    loadingdialog.h \
     logindialog.h \
     mainwindow.h \
     myclickedbtn.h \
@@ -52,7 +58,9 @@ HEADERS += \
 
 FORMS += \
     chatdialog.ui \
+    chatpage.ui \
     chatuseritemwidget.ui \
+    loadingdialog.ui \
     logindialog.ui \
     mainwindow.ui \
     registerdialog.ui \

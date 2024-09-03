@@ -3,6 +3,16 @@
 
 #include "listitembase.h"
 
+/******************************************************************************
+ *
+ * @File       chatuseritemwidget.h
+ * @Brief      用户列表Item
+ *
+ * @Author     Lenis0
+ * @Date       2024/09/03
+ *
+ *****************************************************************************/
+
 namespace Ui {
     class ChatUserItemWidget;
 }

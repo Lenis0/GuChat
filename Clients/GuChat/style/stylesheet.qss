@@ -93,7 +93,8 @@ QDialog#LoginDialog, #RegisterDialog {
 }
 
 #search_wid{
-     background-color:rgb(247,247,247);
+    background-color:rgb(247,247,247);
+    border: 0.5px solid #ececec;
 }
 
 #search_edit {
@@ -109,7 +110,7 @@ QDialog#LoginDialog, #RegisterDialog {
     border: none;
 }
 
-ChatUserItemWidget {
+#chat_user_list::item {
     background-color: rgb(247,247,248);
     border: none;
 }
@@ -172,14 +173,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none; /* 页面滚动部分背景透明 */
 }
 
-#already_add_lb{
-    color:rgb(153,153,153);
-    font-size: 12px;
-    font-family: "Microsoft YaHei";
-}
-
-LoadingDlg{
-    background: #f2eada;
+#title_wid{
+    background: #ffffff;
+    border: 0.5px solid #ececec;
 }
 
 #title_lb{
@@ -188,7 +184,8 @@ LoadingDlg{
     font-weight: normal;
 }
 
-#chatEdit{
+/*输入框*/
+#chat_edit{
     background: #ffffff;
     border: none; /* 隐藏边框 */
     font-family: "Microsoft YaHei"; /* 设置字体 */
@@ -264,7 +261,9 @@ LoadingDlg{
 
 #tool_wid{
     background: #ffffff;
-    border-bottom: 0.5px solid #ececec; /* 设置下边框颜色和宽度 */
+    /*border-bottom: 0.5px solid #ececec; 设置下边框颜色和宽度 */
+    border-top: 0.5px solid #ececec;
+    border-bottom: none;
 }
 
 #emo_lb[state='normal']{
@@ -292,11 +291,11 @@ LoadingDlg{
 }
 
 #chat_data_list{
-     background: black;
+     background: #ffffff;
 }
 
 #chat_bg{
-    background: #f0f0f0;
+    background: #ffffff;
 }
 
 #chat_area{
@@ -306,6 +305,12 @@ LoadingDlg{
 #chat_user_name{
     color:rgb(153,153,153);
     font-size: 14px;
+    font-family: "Microsoft YaHei";
+}
+
+#already_add_lb{
+    color:rgb(153,153,153);
+    font-size: 12px;
     font-family: "Microsoft YaHei";
 }
 

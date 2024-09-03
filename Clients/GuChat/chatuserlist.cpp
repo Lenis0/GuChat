@@ -37,7 +37,6 @@ bool ChatUserList::eventFilter(QObject* watched, QEvent* event) {
 
         if (maxScrollValue - currentValue <= 0) {
             // 滚动到底部，加载新的联系人
-            qDebug() << "load more chat user";
             //发送信号通知聊天界面加载更多聊天内容
             emit sig_loading_chat_user();
         }

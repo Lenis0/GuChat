@@ -5,6 +5,16 @@
 #include <QEvent>
 #include <QScrollBar>
 
+/******************************************************************************
+ *
+ * @File       chatuserlist.h
+ * @Brief      用户列表
+ *
+ * @Author     Lenis0
+ * @Date       2024/09/03
+ *
+ *****************************************************************************/
+
 class ChatUserList: public QListWidget
 {
     Q_OBJECT
