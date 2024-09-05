@@ -38,8 +38,8 @@ signals:
     void sig_send_data(ReqId reqId, QByteArray data);
     void sig_swich_chat();
     void sig_login_failed(int);
+    void sig_user_search(std::shared_ptr<SearchInfo>);
     // void sig_load_apply_list(QJsonArray json_array);
-    // void sig_user_search(std::shared_ptr<SearchInfo>);
     // void sig_friend_apply(std::shared_ptr<AddFriendApply>);
     // void sig_add_auth_friend(std::shared_ptr<AuthInfo>);
     // void sig_auth_rsp(std::shared_ptr<AuthRsp>);

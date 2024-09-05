@@ -94,7 +94,7 @@ QDialog#LoginDialog, #RegisterDialog {
 
 #search_wid{
     background-color:rgb(247,247,247);
-    border: 0.5px solid #ececec;
+    border-bottom: 0.5px solid #ececec;
 }
 
 #search_edit {
@@ -308,12 +308,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-family: "Microsoft YaHei";
 }
 
-#already_add_lb{
-    color:rgb(153,153,153);
-    font-size: 12px;
-    font-family: "Microsoft YaHei";
-}
-
 #side_chat_lb[state='normal']{
     border-image: url(:/res/chat_icon.png);
 }
@@ -362,7 +356,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     border-image: url(:/res/contact_list_press.png);
 }
 
-
+#already_add_lb{
+    color:rgb(153,153,153);
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+}
 
 /* 搜索框列表*/
 #search_list {

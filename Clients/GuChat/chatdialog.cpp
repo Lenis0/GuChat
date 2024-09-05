@@ -42,6 +42,7 @@ ChatDialog::ChatDialog(QWidget* parent):
         ShowSearch(false);
     });
 
+    // 限制搜索框长度
     ui->search_edit->SetMaxLength(15);
 
     // 隐藏搜索list
@@ -53,6 +54,63 @@ ChatDialog::ChatDialog(QWidget* parent):
             this,
             &ChatDialog::slot_loading_chat_user);
     AddChatUserList();
+
+    // 侧边栏
+    // QString head_icon = UserMgr::GetInstance()->GetIcon();
+    // QPixmap pixmap(head_icon); // 加载图片
+    //模拟加载自己头像
+    QPixmap pixmap(":/res/head_2.jpg");
+    QPixmap scaledPixmap = pixmap.scaled(ui->side_head_lb->size(),
+                                         Qt::KeepAspectRatio,
+                                         Qt::SmoothTransformation); // 将图片缩放到label的大小
+    ui->side_head_lb->setPixmap(scaledPixmap); // 将缩放后的图片设置到QLabel上
+    ui->side_head_lb->setScaledContents(true); // 设置QLabel自动缩放图片内容以适应大小
+    ui->side_chat_lb->SetState("normal",
+                               "hover",
+                               "pressed",
+                               "selected_normal",
+                               "selected_hover",
+                               "selected_pressed");
+    ui->side_contact_lb->SetState("normal",
+                                  "hover",
+                                  "pressed",
+                                  "selected_normal",
+                                  "selected_hover",
+                                  "selected_pressed");
+    ui->side_chat_lb->SetSelected(true);
+    this->AddLBGroup(ui->side_chat_lb);
+    this->AddLBGroup(ui->side_contact_lb);
+    connect(ui->side_chat_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_chat);
+    connect(ui->side_contact_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_contact);
+
+    // 搜索框
+    connect(ui->search_edit, &QLineEdit::textChanged, this, &ChatDialog::slot_text_changed);
+}
+
+// 测试
+std::vector<QString> strs = {"Hello, World!",
+                             "hellohellohellohellohello world !",
+                             "爱你",
+                             "hello world",
+                             "HelloWorld"};
+std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
+std::vector<QString> names = {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
+void ChatDialog::AddChatUserList() {
+    // 创建QListWidgetItem，并设置自定义的widget
+    for (int i = 0; i < 13; i++) {
+        int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
+        int str_i = randomValue % strs.size();
+        int head_i = randomValue % heads.size();
+        int name_i = randomValue % names.size();
+
+        auto* chat_user_wid = new ChatUserItemWidget();
+        chat_user_wid->SetInfo(names[name_i], heads[head_i], strs[str_i]);
+        QListWidgetItem* item = new QListWidgetItem;
+        //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+        item->setSizeHint(chat_user_wid->sizeHint());
+        ui->chat_user_list->addItem(item);
+        ui->chat_user_list->setItemWidget(item, chat_user_wid);
+    }
 }
 
 ChatDialog::~ChatDialog() {
@@ -78,32 +136,16 @@ void ChatDialog::ShowSearch(bool b_search) {
     }
 }
 
-// 测试
-std::vector<QString> strs = {"Hello, World!",
-                             "hellohellohellohellohello world !",
-                             "爱你",
-                             "hello world",
-                             "HelloWorld"};
+void ChatDialog::AddLBGroup(StateWidget* lb) {
+    _lb_list.push_back(lb);
+}
 
-std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
-
-std::vector<QString> names = {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
-
-void ChatDialog::AddChatUserList() {
-    // 创建QListWidgetItem，并设置自定义的widget
-    for (int i = 0; i < 13; i++) {
-        int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
-        int str_i = randomValue % strs.size();
-        int head_i = randomValue % heads.size();
-        int name_i = randomValue % names.size();
-
-        auto* chat_user_wid = new ChatUserItemWidget();
-        chat_user_wid->SetInfo(names[name_i], heads[head_i], strs[str_i]);
-        QListWidgetItem* item = new QListWidgetItem;
-        //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-        item->setSizeHint(chat_user_wid->sizeHint());
-        ui->chat_user_list->addItem(item);
-        ui->chat_user_list->setItemWidget(item, chat_user_wid);
+void ChatDialog::ClearLabelState(StateWidget* lb) {
+    for (auto& ele : _lb_list) {
+        if (ele == lb) {
+            continue;
+        }
+        ele->ClearState();
     }
 }
 
@@ -116,10 +158,38 @@ void ChatDialog::slot_loading_chat_user() {
     LoadingDialog* loadingDialog = new LoadingDialog(this);
     loadingDialog->setModal(true);
     loadingDialog->show();
-    qDebug() << "add new data to list.....";
-    AddChatUserList();
+    // qDebug() << "add new data to list.....";
+    this->AddChatUserList();
     // 加载完成后关闭对话框
     loadingDialog->deleteLater();
 
     _b_loading = false;
+}
+
+void ChatDialog::slot_side_chat() {
+    // qDebug() << "receive side chat clicked";
+    ClearLabelState(ui->side_chat_lb);
+    ui->stackedWidget->setCurrentWidget(ui->chat_page);
+    _state = ChatUIMode::ChatMode;
+    ShowSearch(false);
+}
+
+void ChatDialog::slot_side_contact() {
+    // qDebug() << "receive side contact clicked";
+    ClearLabelState(ui->side_contact_lb);
+    //设置
+    if (_last_widget == nullptr) {
+        ui->stackedWidget->setCurrentWidget(ui->friend_apply_page);
+        _last_widget = ui->friend_apply_page;
+    } else {
+        ui->stackedWidget->setCurrentWidget(_last_widget);
+    }
+    _state = ChatUIMode::ContactMode;
+    ShowSearch(false);
+}
+
+void ChatDialog::slot_text_changed(const QString& str) {
+    if (!str.isEmpty()) {
+        ShowSearch(true);
+    }
 }

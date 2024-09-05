@@ -1,6 +1,16 @@
 #ifndef CUSTOMEDIT_H
 #define CUSTOMEDIT_H
 
+/******************************************************************************
+ *
+ * @File       customedit.h
+ * @Brief      搜索框
+ *
+ * @Author     Lenis0
+ * @Date       2024/09/05
+ *
+ *****************************************************************************/
+
 #include <QLineEdit>
 
 class CustomEdit: public QLineEdit {

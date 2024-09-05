@@ -63,7 +63,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <property name="leftMargin">
-          <number>10</number>
+          <number>25</number>
          </property>
          <property name="topMargin">
           <number>0</number>
@@ -219,7 +219,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="chat_edit">
+       <widget class="MyTextEdit" name="chat_edit">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -356,6 +356,11 @@
    <extends>QWidget</extends>
    <header>chatview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MyTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>mytextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
