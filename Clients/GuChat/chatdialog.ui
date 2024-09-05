@@ -259,7 +259,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QListWidget" name="search_list"/>
+       <widget class="SearchList" name="search_list"/>
       </item>
       <item>
        <widget class="ChatUserList" name="chat_user_list"/>
@@ -305,6 +305,11 @@
    <extends>QWidget</extends>
    <header>statewidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SearchList</class>
+   <extends>QListWidget</extends>
+   <header>searchlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

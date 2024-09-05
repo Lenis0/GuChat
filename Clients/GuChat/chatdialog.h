@@ -17,6 +17,10 @@ public:
     void AddChatUserList();
     ~ChatDialog();
 
+protected:
+    bool eventFilter(QObject* watched, QEvent* event);
+    void handleGlobalMousePress(QMouseEvent* event);
+
 private:
     void ShowSearch(bool b_search = false);
     void AddLBGroup(StateWidget* lb);
@@ -33,6 +37,8 @@ private slots:
     void slot_loading_chat_user();
     void slot_side_chat();
     void slot_side_contact();
+    void slot_text_foucus_in();
+    void slot_text_foucus_out();
     void slot_text_changed(const QString& str);
 };
 

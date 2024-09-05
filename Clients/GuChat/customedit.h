@@ -20,13 +20,16 @@ public:
     void SetMaxLength(int maxLen);
 
 protected:
+    void focusInEvent(QFocusEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
 
 private:
     void limitTextLength(QString text);
 
     int _max_len;
+
 signals:
+    void sig_foucus_in();
     void sig_foucus_out();
 };
 

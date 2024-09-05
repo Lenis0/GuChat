@@ -1,6 +1,7 @@
 #include "searchlist.h"
 #include <QScrollBar>
 #include <QWheelEvent>
+#include "adduseritem.h"
 #include "tcpmgr.h"
 
 SearchList::SearchList(QWidget* parent):
@@ -81,12 +82,12 @@ void SearchList::addTipItem() {
     // this->setItemWidget(item_tmp, invalid_item);
     // item_tmp->setFlags(item_tmp->flags() & ~Qt::ItemIsSelectable);
 
-    // auto* add_user_item = new AddUserItem();
-    // QListWidgetItem* item = new QListWidgetItem;
-    // //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-    // item->setSizeHint(add_user_item->sizeHint());
-    // this->addItem(item);
-    // this->setItemWidget(item, add_user_item);
+    auto* add_user_item = new AddUserItem();
+    QListWidgetItem* item = new QListWidgetItem;
+    //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+    item->setSizeHint(add_user_item->sizeHint());
+    this->addItem(item);
+    this->setItemWidget(item, add_user_item);
 }
 
 void SearchList::slot_item_clicked(QListWidgetItem* item) {

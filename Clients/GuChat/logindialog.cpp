@@ -122,7 +122,7 @@ void LoginDialog::initHttpHandlers() {
         int error = jsonObj["error"].toInt();
         if (error != ErrorCodes::SUCCESS) {
             showTip(false, tr("参数错误"));
-            switchEnableWidget(true);
+            switchWidgetEnable(true);
             return;
         }
         showTip(true, tr("登录成功！"));
@@ -203,7 +203,7 @@ void LoginDialog::delTipErr(TipErr te) {
     return;
 }
 
-void LoginDialog::switchEnableWidget(bool state) {
+void LoginDialog::switchWidgetEnable(bool state) {
     ui->user_edit->setEnabled(state);
     ui->passwd_edit->setEnabled(state);
     ui->reg_btn->setEnabled(state);
@@ -214,7 +214,7 @@ void LoginDialog::switchEnableWidget(bool state) {
 void LoginDialog::slot_log_mod_finish(ReqId id, QString res, ErrorCodes err) {
     if (err != ErrorCodes::SUCCESS) {
         showTip(false, tr("网络请求错误"));
-        switchEnableWidget(true);
+        switchWidgetEnable(true);
         return;
     }
 
@@ -222,7 +222,7 @@ void LoginDialog::slot_log_mod_finish(ReqId id, QString res, ErrorCodes err) {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8()); // .json文件
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
         showTip(false, tr("Json解析失败"));
-        switchEnableWidget(true);
+        switchWidgetEnable(true);
         return;
     }
 
@@ -249,14 +249,14 @@ void LoginDialog::slot_tcp_con_finish(bool success) {
 
     } else {
         showTip(false, tr("网络异常"));
-        switchEnableWidget(true);
+        switchWidgetEnable(true);
     }
 }
 
 void LoginDialog::slot_login_failed(int err) {
     QString result = QString("登录失败, err is %1").arg(err);
     showTip(false, result);
-    switchEnableWidget(true);
+    switchWidgetEnable(true);
 }
 
 LoginDialog::~LoginDialog() {
@@ -267,7 +267,7 @@ void LoginDialog::on_login_btn_clicked() {
     auto user = ui->user_edit->text();
     auto passwd = ui->passwd_edit->text();
     showTip(true, tr("正在连接聊天服务...请稍后"));
-    switchEnableWidget(false);
+    switchWidgetEnable(false);
     //发送http请求登录
     QJsonObject json_obj;
     json_obj["user"] = user;

@@ -25,7 +25,7 @@ private:
     void showTip(bool ok, QString str);
     void addTipErr(TipErr te, QString tips);
     void delTipErr(TipErr te);
-    void switchEnableWidget(bool);
+    void switchWidgetEnable(bool);
 
     Ui::LoginDialog* ui;
     QMap<TipErr, QString> _tip_errs;

@@ -8,6 +8,14 @@ void CustomEdit::SetMaxLength(int maxLen) {
     _max_len = maxLen;
 }
 
+void CustomEdit::focusInEvent(QFocusEvent* event) {
+    // 执行获取焦点时的处理逻辑
+    // 调用基类的focusInEvent()方法，保证基类的行为得到执行
+    QLineEdit::focusInEvent(event);
+    //发送获取焦点得信号
+    emit sig_foucus_in();
+}
+
 void CustomEdit::focusOutEvent(QFocusEvent* event) {
     // 执行失去焦点时的处理逻辑
     //qDebug() << "CustomEdit focusout";

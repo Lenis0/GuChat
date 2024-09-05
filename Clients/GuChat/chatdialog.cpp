@@ -1,5 +1,6 @@
 #include "chatdialog.h"
 #include <QAction>
+#include <QMouseEvent>
 #include <QRandomGenerator>
 #include "chatuseritemwidget.h"
 #include "loadingdialog.h"
@@ -16,14 +17,12 @@ ChatDialog::ChatDialog(QWidget* parent):
     searchAction->setIcon(QIcon(":/res/search.png"));
     ui->search_edit->addAction(searchAction, QLineEdit::LeadingPosition);
     ui->search_edit->setPlaceholderText(QStringLiteral("搜索"));
-
     // 创建一个清除动作并设置图标
     QAction* clearAction = new QAction(ui->search_edit);
     clearAction->setIcon(QIcon(":/res/close_transparent.png"));
     // 初始时不显示清除图标
     // 将清除动作添加到LineEdit的末尾位置
     ui->search_edit->addAction(clearAction, QLineEdit::TrailingPosition);
-
     // 当需要显示清除图标时，更改为实际的清除图标
     connect(ui->search_edit, &QLineEdit::textChanged, this, [clearAction](const QString& text) {
         if (!text.isEmpty()) {
@@ -32,7 +31,6 @@ ChatDialog::ChatDialog(QWidget* parent):
             clearAction->setIcon(QIcon(":/res/close_transparent.png")); // 文本为空时，切换回透明图标
         }
     });
-
     // 连接清除动作的触发信号到槽函数，用于清除文本
     connect(clearAction, &QAction::triggered, this, [this, clearAction]() {
         ui->search_edit->clear();
@@ -41,10 +39,14 @@ ChatDialog::ChatDialog(QWidget* parent):
         //清除按钮被按下则不显示搜索框
         ShowSearch(false);
     });
-
     // 限制搜索框长度
     ui->search_edit->SetMaxLength(15);
-
+    // 搜索框
+    connect(ui->search_edit, &CustomEdit::sig_foucus_in, this, &ChatDialog::slot_text_foucus_in);
+    connect(ui->search_edit, &CustomEdit::sig_foucus_out, this, &ChatDialog::slot_text_foucus_out);
+    connect(ui->search_edit, &QLineEdit::textChanged, this, &ChatDialog::slot_text_changed);
+    // 检测鼠标点击位置判断是否要清空搜索框
+    this->installEventFilter(this); // 安装事件过滤器
     // 隐藏搜索list
     ShowSearch(false);
 
@@ -77,14 +79,11 @@ ChatDialog::ChatDialog(QWidget* parent):
                                   "selected_normal",
                                   "selected_hover",
                                   "selected_pressed");
-    ui->side_chat_lb->SetSelected(true);
     this->AddLBGroup(ui->side_chat_lb);
     this->AddLBGroup(ui->side_contact_lb);
     connect(ui->side_chat_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_chat);
     connect(ui->side_contact_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_contact);
-
-    // 搜索框
-    connect(ui->search_edit, &QLineEdit::textChanged, this, &ChatDialog::slot_text_changed);
+    ui->side_chat_lb->SetSelected(true); //设置聊天label选中状态
 }
 
 // 测试
@@ -117,6 +116,31 @@ ChatDialog::~ChatDialog() {
     delete ui;
 }
 
+bool ChatDialog::eventFilter(QObject* watched, QEvent* event) {
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        handleGlobalMousePress(mouseEvent);
+    }
+    return QDialog::eventFilter(watched, event);
+}
+
+void ChatDialog::handleGlobalMousePress(QMouseEvent* event) {
+    // 实现点击位置的判断和处理逻辑
+    // 先判断是否处于搜索模式，如果不处于搜索模式则直接返回
+    if (_mode != ChatUIMode::SearchMode) {
+        return;
+    }
+
+    // 将鼠标点击位置转换为聊天坐标系中的位置
+    QPoint posInChat = ui->stackedWidget->mapFromGlobal(event->globalPosition().toPoint());
+    // 判断点击位置是否在聊天坐标系的范围内
+    if (ui->stackedWidget->rect().contains(posInChat)) {
+        // ui->search_edit->clear();
+        // 在聊天界面内则隐藏搜索界面
+        ShowSearch(false);
+    }
+}
+
 void ChatDialog::ShowSearch(bool b_search) {
     if (b_search) {
         ui->chat_user_list->hide();
@@ -127,11 +151,13 @@ void ChatDialog::ShowSearch(bool b_search) {
         ui->chat_user_list->show();
         ui->con_user_list->hide();
         ui->search_list->hide();
+        ui->search_edit->clearFocus();
         _mode = ChatUIMode::ChatMode;
     } else if (_state == ChatUIMode::ContactMode) {
         ui->chat_user_list->hide();
         ui->search_list->hide();
         ui->con_user_list->show();
+        ui->search_edit->clearFocus();
         _mode = ChatUIMode::ContactMode;
     }
 }
@@ -142,10 +168,9 @@ void ChatDialog::AddLBGroup(StateWidget* lb) {
 
 void ChatDialog::ClearLabelState(StateWidget* lb) {
     for (auto& ele : _lb_list) {
-        if (ele == lb) {
-            continue;
+        if (ele != lb) {
+            ele->ClearState();
         }
-        ele->ClearState();
     }
 }
 
@@ -185,6 +210,14 @@ void ChatDialog::slot_side_contact() {
         ui->stackedWidget->setCurrentWidget(_last_widget);
     }
     _state = ChatUIMode::ContactMode;
+    ShowSearch(false);
+}
+
+void ChatDialog::slot_text_foucus_in() {
+    ShowSearch(true);
+}
+
+void ChatDialog::slot_text_foucus_out() {
     ShowSearch(false);
 }
 
