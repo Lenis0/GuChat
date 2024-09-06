@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "global.h"
 #include "statewidget.h"
+#include <memory>
 
 namespace Ui {
     class ChatDialog;
@@ -32,14 +33,16 @@ private:
     bool _b_loading;
     QList<StateWidget*> _lb_list; // 侧边栏按钮组
     QWidget* _last_widget;        // 侧边栏上一次按钮
+    std::shared_ptr<QDialog> _find_dlg;
 
 private slots:
     void slot_loading_chat_user();
     void slot_side_chat();
     void slot_side_contact();
-    void slot_text_foucus_in();
-    void slot_text_foucus_out();
+    void slot_text_focus_in();
+    void slot_text_focus_out();
     void slot_text_changed(const QString& str);
+    void slot_open_find_dlg();
 };
 
 #endif // CHATDIALOG_H

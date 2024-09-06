@@ -20,7 +20,6 @@ public:
                   QString select_press);
 
     ClickLabelState GetCurState();
-    bool SetCurState(ClickLabelState state);
 
 private:
     QString _normal;

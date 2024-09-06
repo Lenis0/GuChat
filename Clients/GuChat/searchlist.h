@@ -29,6 +29,7 @@ private slots:
     void slot_user_search(std::shared_ptr<SearchInfo> si);
 signals:
     void sig_jump_chat_item(std::shared_ptr<SearchInfo> si);
+    void sig_open_find_dlg();
 };
 
 #endif // SEARCHLIST_H

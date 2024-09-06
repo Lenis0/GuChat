@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 #include "adduseritem.h"
+#include "customedit.h"
 #include "tcpmgr.h"
 
 SearchList::SearchList(QWidget* parent):
@@ -91,51 +92,54 @@ void SearchList::addTipItem() {
 }
 
 void SearchList::slot_item_clicked(QListWidgetItem* item) {
-    // QWidget *widget = this->itemWidget(item); // 获取自定义widget对象
-    // if(!widget){
-    //     qDebug()<< "slot item clicked widget is nullptr";
-    //     return;
-    // }
+    QWidget* widget = this->itemWidget(item); // 获取自定义widget对象
+    if (!widget) {
+        qDebug() << "slot item clicked widget is nullptr";
+        return;
+    }
 
-    // // 对自定义widget进行操作， 将item 转化为基类ListItemBase
-    // ListItemBase *customItem = qobject_cast<ListItemBase*>(widget);
-    // if(!customItem){
-    //     qDebug()<< "slot item clicked widget is nullptr";
-    //     return;
-    // }
+    // 对自定义widget进行操作， 将item 转化为基类ListItemBase
+    ListItemBase* customItem = qobject_cast<ListItemBase*>(widget);
+    if (!customItem) {
+        qDebug() << "slot item clicked widget is nullptr";
+        return;
+    }
 
-    // auto itemType = customItem->GetItemType();
-    // if(itemType == ListItemType::INVALID_ITEM){
-    //     qDebug()<< "slot invalid item clicked ";
-    //     return;
-    // }
+    auto itemType = customItem->GetItemType();
+    if (itemType == ListItemType::INVALID_ITEM) {
+        qDebug() << "slot invalid item clicked ";
+        return;
+    }
 
-    // if(itemType == ListItemType::ADD_USER_TIP_ITEM){
+    if (itemType == ListItemType::ADD_USER_TIP_ITEM) {
+        emit sig_open_find_dlg();
+        return;
+    }
 
-    //     if (_send_pending) {
-    //         return;
-    //     }
+    if (itemType == ListItemType::SEARCH_USER_ITEM) {
+        // if (_send_pending) {
+        //     return;
+        // }
+        // if (!_search_edit) {
+        //     return;
+        // }
+        // waitPending(true);
+        // auto search_edit = dynamic_cast<CustomEdit*>(_search_edit);
+        // auto uid_str = search_edit->text();
+        // //此处发送请求给server
+        // QJsonObject jsonObj;
+        // jsonObj["uid"] = uid_str;
 
-    //     if (!_search_edit) {
-    //         return;
-    //     }
-    //     waitPending(true);
-    //     auto search_edit = dynamic_cast<CustomizeEdit*>(_search_edit);
-    //     auto uid_str = search_edit->text();
-    //     //此处发送请求给server
-    //     QJsonObject jsonObj;
-    //     jsonObj["uid"] = uid_str;
+        // QJsonDocument doc(jsonObj);
+        // QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
 
-    //     QJsonDocument doc(jsonObj);
-    //     QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+        // //发送tcp请求给chat server
+        // emit TcpMgr::GetInstance() -> sig_send_data(ReqId::ID_SEARCH_USER_REQ, jsonData);
+        return;
+    }
 
-    //     //发送tcp请求给chat server
-    //     emit TcpMgr::GetInstance()->sig_send_data(ReqId::ID_SEARCH_USER_REQ, jsonData);
-    //     return;
-    // }
-
-    // //清除弹出框
-    // this->CloseFindDlg();
+    //清除弹出框
+    this->CloseFindDlg();
 }
 
 void SearchList::slot_user_search(std::shared_ptr<SearchInfo> si) {

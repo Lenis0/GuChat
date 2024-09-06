@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include <QRandomGenerator>
 #include "chatuseritemwidget.h"
+#include "finddialog.h"
 #include "loadingdialog.h"
 #include "ui_chatdialog.h"
 
@@ -42,9 +43,13 @@ ChatDialog::ChatDialog(QWidget* parent):
     // 限制搜索框长度
     ui->search_edit->SetMaxLength(15);
     // 搜索框
-    connect(ui->search_edit, &CustomEdit::sig_foucus_in, this, &ChatDialog::slot_text_foucus_in);
-    connect(ui->search_edit, &CustomEdit::sig_foucus_out, this, &ChatDialog::slot_text_foucus_out);
+    connect(ui->search_edit, &CustomEdit::sig_focus_in, this, &ChatDialog::slot_text_focus_in);
+    connect(ui->chat_page, &ChatPage::sig_focus_in_edit, this, &ChatDialog::slot_text_focus_out);
     connect(ui->search_edit, &QLineEdit::textChanged, this, &ChatDialog::slot_text_changed);
+
+    // 搜索列表
+    connect(ui->search_list, &SearchList::sig_open_find_dlg, this, &ChatDialog::slot_open_find_dlg);
+
     // 检测鼠标点击位置判断是否要清空搜索框
     this->installEventFilter(this); // 安装事件过滤器
     // 隐藏搜索list
@@ -213,16 +218,21 @@ void ChatDialog::slot_side_contact() {
     ShowSearch(false);
 }
 
-void ChatDialog::slot_text_foucus_in() {
-    ShowSearch(true);
+void ChatDialog::slot_text_focus_out() {
+    ShowSearch(false);
 }
 
-void ChatDialog::slot_text_foucus_out() {
-    ShowSearch(false);
+void ChatDialog::slot_text_focus_in() {
+    ShowSearch(true);
 }
 
 void ChatDialog::slot_text_changed(const QString& str) {
     if (!str.isEmpty()) {
         ShowSearch(true);
     }
+}
+
+void ChatDialog::slot_open_find_dlg() {
+    _find_dlg = std::make_shared<FindDialog>(ui->search_edit->text(), this);
+    _find_dlg->show();
 }

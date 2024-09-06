@@ -84,6 +84,11 @@ void MyTextEdit::keyPressEvent(QKeyEvent* e) {
     QTextEdit::keyPressEvent(e);
 }
 
+void MyTextEdit::focusInEvent(QFocusEvent* e) {
+    QTextEdit::focusInEvent(e);
+    emit sig_focus_in();
+}
+
 void MyTextEdit::insertImages(const QString& url) {
     QImage image(url);
     //按比例缩放图片

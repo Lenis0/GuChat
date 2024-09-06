@@ -47,5 +47,7 @@
         <file>res/head_1.png</file>
         <file>res/head_2.jpg</file>
         <file>res/head_3.png</file>
+        <file>res/find_not_found.png</file>
+        <file>res/find_null_input.png</file>
     </qresource>
 </RCC>

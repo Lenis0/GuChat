@@ -30,7 +30,9 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     myclickedbtn.cpp \
+    mycloselabel.cpp \
     mytextedit.cpp \
+    mytitlebar.cpp \
     picturebubble.cpp \
     registerdialog.cpp \
     resetdialog.cpp \
@@ -61,7 +63,9 @@ HEADERS += \
     logindialog.h \
     mainwindow.h \
     myclickedbtn.h \
+    mycloselabel.h \
     mytextedit.h \
+    mytitlebar.h \
     picturebubble.h \
     registerdialog.h \
     resetdialog.h \
@@ -83,6 +87,7 @@ FORMS += \
     loadingdialog.ui \
     logindialog.ui \
     mainwindow.ui \
+    mytitlebar.ui \
     registerdialog.ui \
     resetdialog.ui
 

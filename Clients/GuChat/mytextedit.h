@@ -36,6 +36,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent* event); // 拖入文件
     void dropEvent(QDropEvent* event);           // 放下文件
     void keyPressEvent(QKeyEvent* e);            // 按回车
+    void focusInEvent(QFocusEvent* e);
 
 private:
     void insertImages(const QString& url);
@@ -57,6 +58,7 @@ private slots:
 
 signals:
     void sig_send();
+    void sig_focus_in();
 };
 
 #endif // MYTEXTEDIT_H

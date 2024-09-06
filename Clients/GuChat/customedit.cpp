@@ -13,7 +13,7 @@ void CustomEdit::focusInEvent(QFocusEvent* event) {
     // 调用基类的focusInEvent()方法，保证基类的行为得到执行
     QLineEdit::focusInEvent(event);
     //发送获取焦点得信号
-    emit sig_foucus_in();
+    emit sig_focus_in();
 }
 
 void CustomEdit::focusOutEvent(QFocusEvent* event) {
@@ -22,7 +22,7 @@ void CustomEdit::focusOutEvent(QFocusEvent* event) {
     // 调用基类的focusOutEvent()方法，保证基类的行为得到执行
     QLineEdit::focusOutEvent(event);
     //发送失去焦点得信号
-    emit sig_foucus_out();
+    emit sig_focus_out();
 }
 
 void CustomEdit::limitTextLength(QString text) {

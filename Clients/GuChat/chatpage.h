@@ -28,11 +28,15 @@ protected:
     // 因为我们继承了QWidget,我们想实现样式更新，需要重写paintEvent
     void paintEvent(QPaintEvent* event);
 
-private slots:
-    void on_send_btn_clicked();
-
 private:
     Ui::ChatPage* ui;
+
+signals:
+    void sig_focus_in_edit();
+
+private slots:
+    void on_send_btn_clicked();
+    void slot_focus_in_edit();
 };
 
 #endif // CHATPAGE_H

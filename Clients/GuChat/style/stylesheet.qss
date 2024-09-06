@@ -403,6 +403,59 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-size: 12pt;
 }
 
+
+/* find界面 */
+#FindDialog {
+    background-color:rgb(247,247,247);
+}
+
+#lenis_title_bar_wid, #lenis_not_found_wid, #lenis_find_list{
+    background-color:rgb(247,247,247);
+    border: none;
+}
+
+#lenis_search_wid {
+    background-color:rgb(247,247,247);
+    border-bottom: 0.5px solid #ececec;
+}
+
+#lenis_search_edit {
+    background-color: white;
+    border-left: 2px solid #f1f1f1;
+    border-right:  none;
+    border-top:  2px solid #f1f1f1;
+    border-bottom:  2px solid #f1f1f1;
+}
+
+#lenis_close_wid {
+    background-color: white;
+    border-left: none;
+    border-right:  2px solid #f1f1f1;
+    border-top:  2px solid #f1f1f1;
+    border-bottom:  2px solid #f1f1f1;
+}
+
+#lenis_close_lb[state='hide']{
+    border-image: url(:/res/close_transparent.png);
+}
+
+#lenis_close_lb[state='show']{
+    border-image: url(:/res/close_search.png);
+}
+
+#lenis_null_icon[state='null_input']{
+    border-image: url(:/res/find_null_input.png);
+}
+
+#lenis_null_icon[state='not_found']{
+    border-image: url(:/res/find_not_found.png);
+}
+
+#lenis_null_tip {
+    font-family: "Microsoft YaHei";
+    font-size: 12pt;
+}
+
 #already_add_lb{
     color:rgb(153,153,153);
     font-size: 12px;

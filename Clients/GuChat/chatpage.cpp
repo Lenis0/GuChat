@@ -18,6 +18,7 @@ ChatPage::ChatPage(QWidget* parent): QWidget(parent), ui(new Ui::ChatPage) {
     ui->emo_lb->SetState("normal", "hover", "press", "normal", "hover", "press");
     ui->file_lb->SetState("normal", "hover", "press", "normal", "hover", "press");
 
+    connect(ui->chat_edit, &MyTextEdit::sig_focus_in, this, &ChatPage::slot_focus_in_edit);
     connect(ui->chat_edit, &MyTextEdit::sig_send, this, &ChatPage::on_send_btn_clicked);
 }
 
@@ -57,4 +58,8 @@ void ChatPage::on_send_btn_clicked() {
             ui->chat_data_list->appendChatItem(pChatItem);
         }
     }
+}
+
+void ChatPage::slot_focus_in_edit() {
+    emit sig_focus_in_edit();
 }
