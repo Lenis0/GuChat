@@ -4,9 +4,10 @@
 FindDialog::FindDialog(QString str, QWidget* parent): QDialog(parent), ui(new Ui::FindDialog) {
     ui->setupUi(this);
     // 设置对话框标题
-    setWindowTitle("搜索");
+    this->setWindowTitle("搜索");
     // 隐藏对话框标题栏
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+    this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+    this->setAttribute(Qt::WA_TranslucentBackground); // 窗口透明
 
     /* 搜索edit */
     QAction* searchAction = new QAction(ui->lenis_search_edit);
@@ -33,7 +34,7 @@ FindDialog::FindDialog(QString str, QWidget* parent): QDialog(parent), ui(new Ui
     this->SwitchFindResultShow(!str.isEmpty());
 
     // 设置成Modal模态
-    this->setModal(true);
+    // this->setModal(true);
 }
 
 void FindDialog::SwitchFindResultShow(bool b_search) {

@@ -99,6 +99,7 @@ QDialog#LoginDialog, #RegisterDialog {
 
 #search_edit {
     border: 2px solid #f1f1f1;
+    font-family: "Microsoft YaHei";
 }
 
 #chat_user_wid{
@@ -403,19 +404,123 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-size: 12pt;
 }
 
-
-/* find界面 */
-#FindDialog {
-    background-color:rgb(247,247,247);
+/* 标题栏 */
+#lenis_win_title_lb {
+    text-align: center;
+    font-family: "Microsoft YaHei";
 }
 
-#lenis_title_bar_wid, #lenis_not_found_wid, #lenis_find_list{
-    background-color:rgb(247,247,247);
+/*#lenis_win_wid {
+    border-top-right-radius: 10px;
+    border: none;
+}*/
+
+#lenis_win_close_btn[state='normal']{
+    background: url(:/res/win_close.png) no-repeat center;
+    border-top-right-radius: 10px;
+    background-color: rgb(247,247,247);
+}
+
+#lenis_win_close_btn[state='hover']{
+    background: url(:/res/win_close_hover.png) no-repeat center;
+    border-top-right-radius: 10px;
+    background-color: #e81123;
+}
+
+#lenis_win_close_btn[state='press']{
+    background: url(:/res/win_close_press.png) no-repeat center;
+    border-top-right-radius: 10px;
+    background-color: #e81123;
+}
+
+#lenis_win_max_btn[state='normal_normal']{
+    background: url(:/res/win_max.png) no-repeat center;
+    background-color: rgb(247,247,247);
     border: none;
 }
 
+#lenis_win_max_btn[state='normal_hover']{
+    background: url(:/res/win_max.png) no-repeat center;
+    background-color: LightGray;
+    border: none;
+}
+
+#lenis_win_max_btn[state='normal_press']{
+    background: url(:/res/win_max.png) no-repeat center;
+    background-color: Grey;
+    border: none;
+}
+
+#lenis_win_max_btn[state='max_normal']{
+    background: url(:/res/win_normal.png) no-repeat center;
+    background-color: rgb(247,247,247);
+    border: none;
+}
+
+#lenis_win_max_btn[state='max_hover']{
+    background: url(:/res/win_normal.png) no-repeat center;
+    background-color: LightGray;
+    border: none;
+}
+
+#lenis_win_max_btn[state='max_press']{
+    background: url(:/res/win_normal.png) no-repeat center;
+    background-color: Grey;
+    border: none;
+}
+
+#lenis_win_min_btn[state='normal']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: rgb(247,247,247);
+    border: none;
+}
+
+#lenis_win_min_btn[state='hover']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: LightGray;
+    border: none;
+}
+
+#lenis_win_min_btn[state='press']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: Grey;
+    border: none;
+}
+
+/* find界面 */
+/*#FindDialog{
+    border-top: 1px solid QLinearGradient(y0:0, y1:1,stop: 0 #DADADA, stop: 1 transparent);
+    border-left: 1px solid QLinearGradient(x0:0, x1:1,stop: 0 #DADADA, stop: 1 transparent);
+    border-bottom: 1px solid QLinearGradient(y0:0, y1:1,stop: 0 transparent, stop: 1  #DADADA);
+    border-right: 1px solid QLinearGradient(x0:0, x1:1,stop:  0 transparent, stop: 1 #DADADA);
+    border-top: 5px solid qlineargradient(y0:0, y1:1,stop: 0 #ececef, stop: 1 white);
+    border-left: 5px solid qlineargradient(x0:0, x1:1,stop: 0 #ececef, stop: 1 white);
+    border-bottom: 5px solid qlineargradient(y0:0, y1:1,stop: 0 white, stop: 1  #ececef);
+    border-right: 5px solid qlineargradient(x0:0, x1:1,stop:  0 white, stop: 1 #ececef);
+}*/
+
+#lenis_find_frame{
+    background-color: rgb(247,247,247);
+    border-radius: 10px;
+    border:1px solid  #e2e2e2;
+}
+
+#lenis_title_bar_wid {
+    background-color: rgb(247,247,247);
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#lenis_not_found_wid, #lenis_find_list {
+    background-color: rgb(247,247,247);
+    border: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 #lenis_search_wid {
-    background-color:rgb(247,247,247);
+    background-color: rgb(247,247,247);
     border-bottom: 0.5px solid #ececec;
 }
 
@@ -425,6 +530,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     border-right:  none;
     border-top:  2px solid #f1f1f1;
     border-bottom:  2px solid #f1f1f1;
+    font-family: "Microsoft YaHei";
 }
 
 #lenis_close_wid {

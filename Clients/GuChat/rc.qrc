@@ -49,5 +49,11 @@
         <file>res/head_3.png</file>
         <file>res/find_not_found.png</file>
         <file>res/find_null_input.png</file>
+        <file>res/win_close.png</file>
+        <file>res/win_close_hover.png</file>
+        <file>res/win_close_press.png</file>
+        <file>res/win_max.png</file>
+        <file>res/win_min.png</file>
+        <file>res/win_normal.png</file>
     </qresource>
 </RCC>

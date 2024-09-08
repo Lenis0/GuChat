@@ -1,6 +1,16 @@
 #ifndef FINDDIALOG_H
 #define FINDDIALOG_H
 
+/******************************************************************************
+ *
+ * @File       finddialog.h
+ * @Brief      搜索界面
+ *
+ * @Author     Lenis0
+ * @Date       2024/09/07
+ *
+ *****************************************************************************/
+
 #include <QDialog>
 #include "global.h"
 
