@@ -12,7 +12,12 @@
  *****************************************************************************/
 
 #include <QDialog>
+#include <QGraphicsEffect>
 #include "global.h"
+#ifdef Q_OS_WIN
+#include "windows.h"
+#include "windowsx.h"
+#endif
 
 namespace Ui {
     class FindDialog;
@@ -25,14 +30,26 @@ public:
     explicit FindDialog(QString str, QWidget* parent = nullptr);
     ~FindDialog();
 
+protected:
+    bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result);
+
 private:
-    void SwitchFindResultShow(bool b_search);
+    void switchFindResultShow(bool b_search);
+
     Ui::FindDialog* ui;
+#ifdef Q_OS_WIN
+    HWND _hWnd;
+    DWORD _style;
+#endif
+    QGraphicsDropShadowEffect* effect_shadow; // 阴影效果
 
 signals:
 
 private slots:
     void slot_text_changed(const QString& str);
+    void slot_win_close();
+    void slot_switch_win_max(bool b_max);
+    void slot_win_min();
 };
 
 #endif // FINDDIALOG_H

@@ -233,6 +233,8 @@ void ChatDialog::slot_text_changed(const QString& str) {
 }
 
 void ChatDialog::slot_open_find_dlg() {
-    _find_dlg = std::make_shared<FindDialog>(ui->search_edit->text(), this);
+    // 不设置父窗口 就可以成为独立窗口
+    _find_dlg = std::make_shared<FindDialog>(ui->search_edit->text());
     _find_dlg->show();
+    ui->search_edit->clear();
 }

@@ -71,6 +71,8 @@ enum ClickLabelState { Normal = 0, Selected = 1 };
 
 enum MyCloseLabelState { Hide = 0, Show = 1 };
 
+enum WinState { WinNormal = 0, WinMax = 1 };
+
 struct ServerInfo {
     QString Host;
     QString Port;
