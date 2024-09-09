@@ -5,7 +5,17 @@
 #include <QStyleFactory>
 #include "global.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
+    // 永不缩放 100%
+    // QApplication::setAttribute(Qt::AA_Use96Dpi);
+
+    // 使用高分辨率的位图（可选）
+    // QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    // // 向下取整的缩放 124% 150%也会变为100%
+    // QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+    //     Qt::HighDpiScaleFactorRoundingPolicy::Floor);
+
     QApplication a(argc, argv);
     // // 获取所有可用的样式名称
     // QStringList styles = QStyleFactory::keys();
@@ -34,7 +44,7 @@ int main(int argc, char *argv[]) {
     QSettings settings(config_path, QSettings::IniFormat); // 读取ini文件
     QString gate_host = settings.value("GateServer/Host").toString();
     QString gate_port = settings.value("GateServer/Port").toString();
-    gate_url_prefix = "http://"+gate_host+":"+gate_port;
+    gate_url_prefix = "http://" + gate_host + ":" + gate_port;
 
     MainWindow w;
     w.show();

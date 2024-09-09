@@ -15,8 +15,8 @@
 #include <QGraphicsEffect>
 #include "global.h"
 #ifdef Q_OS_WIN
-#include "windows.h"
-#include "windowsx.h"
+#include <windows.h>
+#include <windowsx.h>
 #endif
 
 namespace Ui {
@@ -31,7 +31,10 @@ public:
     ~FindDialog();
 
 protected:
+    // Windows消息事件处理
     bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result);
+    // 窗口状态变化处理
+    void changeEvent(QEvent* event);
 
 private:
     void switchFindResultShow(bool b_search);

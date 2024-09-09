@@ -26,11 +26,14 @@ class MyTitleBar: public QWidget {
 public:
     explicit MyTitleBar(QWidget* parent = nullptr);
     void setTitle(QString title);
+    void switchWinState();
+    WinState getWinState();
     ~MyTitleBar();
 
 protected:
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
     void mouseDoubleClickEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
 
@@ -39,6 +42,7 @@ private:
 
     WinState _win_state; // 窗口最大化状态
     QPoint _click_pos;   // 记录鼠标左键点击时的位置
+    bool _can_move;      // 判断位置是否可以移动
 
 signals:
     void sig_win_close();

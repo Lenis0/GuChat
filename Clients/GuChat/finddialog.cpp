@@ -6,7 +6,9 @@ FindDialog::FindDialog(QString str, QWidget* parent): QDialog(parent), ui(new Ui
     // 设置对话框标题
     this->setWindowTitle("搜索");
     // 隐藏对话框标题栏
-    this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+    // Qt::WindowMinimizeButtonHint 程序在任务栏被点击时能够显示/隐藏.
+    this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint |
+                         Qt::WindowMinimizeButtonHint);
     this->setAttribute(Qt::WA_TranslucentBackground); // 窗口透明
     ui->lenis_find_frame->setProperty("state", "normal");
     ui->lenis_find_list->setProperty("state", "normal");
@@ -35,7 +37,10 @@ FindDialog::FindDialog(QString str, QWidget* parent): QDialog(parent), ui(new Ui
 #ifdef Q_OS_WIN
     _hWnd = (HWND)this->winId();
     _style = ::GetWindowLong(_hWnd, GWL_STYLE);
-    ::SetWindowLong(_hWnd, GWL_STYLE, _style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
+    // WS_MAXIMIZEBOX   可以实现Windows拖动时半屏分屏动画
+    // WS_THICKFRAME    可以实现Windows缩放功能以及动画
+    // WS_CAPTION       可以实现Windows最大化最小化的动画
+    ::SetWindowLong(_hWnd, GWL_STYLE, _style | WS_THICKFRAME | WS_CAPTION);
 #endif
     /* 搜索edit */
     QAction* searchAction = new QAction(ui->lenis_search_edit);
@@ -102,11 +107,6 @@ void FindDialog::slot_switch_win_max(bool b_max) {
         ui->lenis_find_frame->setProperty("state", "max");
         ui->lenis_not_found_wid->setProperty("state", "max");
         ui->lenis_find_list->setProperty("state", "max");
-#ifdef Q_OS_WIN
-        _hWnd = (HWND)this->winId();
-        _style = ::GetWindowLong(_hWnd, GWL_STYLE);
-        ::SetWindowLong(_hWnd, GWL_STYLE, _style & ~WS_MAXIMIZEBOX);
-#endif
         this->showMaximized();
     } else {
         this->layout()->setContentsMargins(0, 0, 2, 2); //margin应该设置到布局上
@@ -114,15 +114,11 @@ void FindDialog::slot_switch_win_max(bool b_max) {
         ui->lenis_find_frame->setProperty("state", "normal");
         ui->lenis_not_found_wid->setProperty("state", "normal");
         ui->lenis_find_list->setProperty("state", "normal");
-#ifdef Q_OS_WIN
-        _hWnd = (HWND)this->winId();
-        _style = ::GetWindowLong(_hWnd, GWL_STYLE);
-        ::SetWindowLong(_hWnd, GWL_STYLE, _style | WS_MAXIMIZEBOX);
-#endif
         this->showNormal();
     }
     repolish(ui->lenis_not_found_wid);
     repolish(ui->lenis_find_list);
+    repolish(ui->lenis_find_frame);
     repolish(this);
     this->update();
 }
@@ -137,14 +133,104 @@ FindDialog::~FindDialog() {
 
 bool FindDialog::nativeEvent(const QByteArray& eventType, void* message, qintptr* result) {
     if (eventType == "windows_generic_MSG") {
+#ifdef Q_OS_WIN
         MSG* msg = static_cast<MSG*>(message);
-        //qDebug() << TIMEMS << "nativeEvent" << msg->wParam << msg->message;
 
         //不同的消息类型和参数进行不同的处理
-        if (msg->message == WM_NCCALCSIZE) {
-            *result = 0;
-            return true;
+        switch (msg->message) {
+            case WM_NCCALCSIZE: {
+                *result = 0;
+                return true;
+                break;
+            }
+            case WM_NCHITTEST: {
+                // 根据电脑缩放获取窗口正确坐标
+                // 但是124%还是算作100% 所以直接给1.25
+                // double dpi  = QGuiApplication::primaryScreen()->logicalDotsPerInch() / 96;
+                double dpi = 1.25;
+                int padding = 5; //边界宽度
+                // 全局坐标 （绝对位置）
+                int xPos = GET_X_LPARAM(msg->lParam);
+                int yPos = GET_Y_LPARAM(msg->lParam);
+                // 将全局坐标转换为窗口坐标 （相对位置）
+                QPoint pos = mapFromGlobal(QPoint(xPos, yPos) / dpi);
+                int x = pos.x();
+                int y = pos.y();
+                *result = 0; // 拖动
+                if (x > 0 && x < padding) {
+                    *result = HTLEFT;
+                }
+                if (x < this->width() && x > this->width() - padding) {
+                    *result = HTRIGHT;
+                }
+                if (y > 0 && y < padding) {
+                    *result = HTTOP;
+                }
+                if (y < this->height() && y > this->height() - padding) {
+                    *result = HTBOTTOM;
+                }
+                if ((x > 0 && x < padding) && (y > 0 && y < padding)) {
+                    *result = HTTOPLEFT;
+                }
+                if ((x < this->width() && x > this->width() - padding) && (y > 0 && y < padding)) {
+                    *result = HTTOPRIGHT;
+                }
+                if ((x > 0 && x < padding) && (y < this->height() && y > this->height() - padding)) {
+                    *result = HTBOTTOMLEFT;
+                }
+                if ((x < this->width() && x > this->width() - padding) &&
+                    (y < this->height() && y > this->height() - padding)) {
+                    *result = HTBOTTOMRIGHT;
+                }
+                // 处理拉伸
+                if (*result != 0) {
+                    return true;
+                }
+                // // 识别标题栏拖动产生半屏全屏效果 配合WS_MAXIMIZEBOX
+                // if (*result == HTCAPTION) {
+                //     QPoint posInTitle = ui->lenis_title_bar_wid->mapFromGlobal(QPoint(xPos, yPos));
+                //     return ui->lenis_title_bar_wid->rect().contains(posInTitle);
+                // }
+                break;
+            }
+            default:
+                break;
         }
+#endif
     }
     return false;
+}
+
+void FindDialog::changeEvent(QEvent* event) {
+    if (QEvent::WindowStateChange == event->type()) {
+        QWindowStateChangeEvent* stateEvent = dynamic_cast<QWindowStateChangeEvent*>(event);
+        if (Q_NULLPTR != stateEvent) {
+            if (this->isMaximized()) {
+                if (ui->lenis_title_bar_wid->getWinState() == WinState::WinNormal) {
+                    ui->lenis_title_bar_wid->switchWinState();
+                }
+                this->layout()->setContentsMargins(0, 0, 0, 0); //margin应该设置到布局上
+                effect_shadow->setEnabled(false);
+                // 取消圆角边框
+                ui->lenis_find_frame->setProperty("state", "max");
+                ui->lenis_not_found_wid->setProperty("state", "max");
+                ui->lenis_find_list->setProperty("state", "max");
+            } else if (this->windowState() == Qt::WindowNoState) {
+                if (ui->lenis_title_bar_wid->getWinState() == WinState::WinMax) {
+                    ui->lenis_title_bar_wid->switchWinState();
+                }
+                this->layout()->setContentsMargins(0, 0, 2, 2); //margin应该设置到布局上
+                effect_shadow->setEnabled(true);
+                ui->lenis_find_frame->setProperty("state", "normal");
+                ui->lenis_not_found_wid->setProperty("state", "normal");
+                ui->lenis_find_list->setProperty("state", "normal");
+            }
+            repolish(ui->lenis_not_found_wid);
+            repolish(ui->lenis_find_list);
+            repolish(ui->lenis_find_frame);
+            repolish(this);
+            this->update();
+        }
+    }
+    return QDialog::changeEvent(event);
 }

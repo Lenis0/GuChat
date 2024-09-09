@@ -8,11 +8,26 @@ MyTitleBar::MyTitleBar(QWidget* parent):
     ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
     ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
     ui->lenis_win_min_btn->SetState("normal", "hover", "press");
-    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void MyTitleBar::setTitle(QString title) {
     ui->lenis_win_title_lb->setText(title);
+}
+
+void MyTitleBar::switchWinState() {
+    if (_win_state == WinState::WinNormal) {
+        _win_state = WinState::WinMax;
+        ui->lenis_win_max_btn->SetState("max_normal", "max_hover", "max_press");
+        ui->lenis_win_close_btn->SetState("max_normal", "max_hover", "max_press");
+    } else if (_win_state == WinState::WinMax) {
+        _win_state = WinState::WinNormal;
+        ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
+        ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
+    }
+}
+
+WinState MyTitleBar::getWinState() {
+    return _win_state;
 }
 
 MyTitleBar::~MyTitleBar() {
@@ -21,12 +36,26 @@ MyTitleBar::~MyTitleBar() {
 
 // 当鼠标点击了标题栏，记录下当时的位置
 void MyTitleBar::mousePressEvent(QMouseEvent* event) {
+    // 如果鼠标点到btn 那么就不触发move事件
+    QPoint posInCloseBtn = ui->lenis_win_close_btn->mapFromGlobal(event->globalPosition().toPoint());
+    QPoint posInMaxBtn = ui->lenis_win_max_btn->mapFromGlobal(event->globalPosition().toPoint());
+    QPoint posInMinBtn = ui->lenis_win_min_btn->mapFromGlobal(event->globalPosition().toPoint());
+    if (ui->lenis_win_close_btn->rect().contains(posInCloseBtn) ||
+        ui->lenis_win_max_btn->rect().contains(posInMaxBtn) ||
+        ui->lenis_win_min_btn->rect().contains(posInMinBtn)) {
+        _can_move = false;
+        return QWidget::mousePressEvent(event);
+    }
     _click_pos = event->pos();
+    _can_move = true;
     return QWidget::mousePressEvent(event);
 }
 
 // 鼠标移动
 void MyTitleBar::mouseMoveEvent(QMouseEvent* event) {
+    if (!_can_move) {
+        return QWidget::mouseMoveEvent(event);
+    }
     if (_win_state == WinState::WinMax) {
         // // 获取鼠标的全局位置
         // QPoint mousePos = event->globalPosition().toPoint();
@@ -37,7 +66,7 @@ void MyTitleBar::mouseMoveEvent(QMouseEvent* event) {
         //     int x = mousePos.x() * this->window()->normalGeometry().width() /
         //             this->window()->geometry().width(); // 确定x位置
         //     int y = mousePos.y();                       // 窗口顶部与鼠标光标对齐
-        //     on_lenis_win_max_btn_clicked(); // 还原
+        //     slot_find_switch_win_max(); // 还原
         //     // 确保窗口不会超出屏幕边界
         //     x = qBound(screenGeometry.left(), x, screenGeometry.right() - this->window()->width());
         //     y = qBound(screenGeometry.top(), y, screenGeometry.bottom() - this->window()->height());
@@ -68,21 +97,23 @@ void MyTitleBar::mouseMoveEvent(QMouseEvent* event) {
     return QWidget::mouseMoveEvent(event);
 }
 
+// 释放将_can_move置为false
+void MyTitleBar::mouseReleaseEvent(QMouseEvent* event) {
+    _can_move = false;
+    return QWidget::mouseReleaseEvent(event);
+}
+
 // 双击鼠标左键和放大按钮效果一致
 void MyTitleBar::mouseDoubleClickEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         on_lenis_win_max_btn_clicked();
     }
-    return QWidget::mouseDoubleClickEvent(event);
+    return;
 }
 
 void MyTitleBar::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Escape && _win_state == WinState::WinMax) {
-        _win_state = WinState::WinNormal;
-        ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
-        ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
-        emit sig_switch_win_max(false);
-        return;
+        on_lenis_win_max_btn_clicked();
     }
     return QWidget::keyPressEvent(event);
 }
