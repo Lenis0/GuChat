@@ -111,6 +111,7 @@ void MyTitleBar::mouseDoubleClickEvent(QMouseEvent* event) {
     return;
 }
 
+// Esc 还原最大化
 void MyTitleBar::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Escape && _win_state == WinState::WinMax) {
         on_lenis_win_max_btn_clicked();

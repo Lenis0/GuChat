@@ -35,6 +35,7 @@ protected:
     bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result);
     // 窗口状态变化处理
     void changeEvent(QEvent* event);
+    void paintEvent(QPaintEvent* event);
 
 private:
     void switchFindResultShow(bool b_search);

@@ -494,12 +494,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 /* find界面 */
-#FindDialog {
-    background-color: rgb(247,247,247);
-    border-radius: 10px;
-    border:1px solid  #e2e2e2;
-}
-
 #lenis_find_frame[state='normal'] {
     background-color: rgb(247,247,247);
     border-radius: 10px;
