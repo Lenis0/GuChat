@@ -2,6 +2,7 @@
 
 MyClickedBtn::MyClickedBtn(QWidget* parent): QPushButton(parent) {
     setCursor(Qt::PointingHandCursor); // 设置光标为小手
+    setFocusPolicy(Qt::NoFocus);       // 不捕获Enter事件
 }
 
 MyClickedBtn::~MyClickedBtn() {}

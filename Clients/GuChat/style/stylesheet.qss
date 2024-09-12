@@ -94,6 +94,7 @@ QDialog#LoginDialog, #RegisterDialog {
 
 #search_wid{
     background-color:rgb(247,247,247);
+    border-top: 0.5px solid #ececec;
     border-bottom: 0.5px solid #ececec;
 }
 
@@ -385,10 +386,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     outline: none;
 }
 
-/*#invalid_item {
+#invalid_item {
     background-color: #eaeaea;
     border: none;
-}*/
+}
 
 #add_tip {
     border-image: url(:/res/addtip.png);
@@ -414,19 +415,28 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: url(:/res/win_close.png) no-repeat center;
     background-color: rgb(247,247,247);
     border-top-right-radius: 10px;
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 #lenis_win_close_btn[state='normal_hover']{
     background: url(:/res/win_close_hover.png) no-repeat center;
     background-color: #e81123;
     border-top-right-radius: 10px;
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 #lenis_win_close_btn[state='normal_press']{
     background: url(:/res/win_close_press.png) no-repeat center;
     background-color: #e81123;
     border-top-right-radius: 10px;
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 
 #lenis_win_close_btn[state='max_normal']{
@@ -448,17 +458,26 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #lenis_win_max_btn[state='normal_normal']{
     background: url(:/res/win_max.png) no-repeat center;
     background-color: rgb(247,247,247);
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 #lenis_win_max_btn[state='normal_hover']{
     background: url(:/res/win_max.png) no-repeat center;
     background-color: LightGray;
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 #lenis_win_max_btn[state='normal_press']{
     background: url(:/res/win_max.png) no-repeat center;
     background-color: Grey;
-    border: none;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
 }
 
 #lenis_win_max_btn[state='max_normal']{
@@ -477,17 +496,42 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     border: none;
 }
 
-#lenis_win_min_btn[state='normal']{
+#lenis_win_min_btn[state='normal_normal']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: rgb(247,247,247);
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+#lenis_win_min_btn[state='normal_hover']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: LightGray;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+#lenis_win_min_btn[state='normal_press']{
+    background: url(:/res/win_min.png) no-repeat center;
+    background-color: Grey;
+    border-top: 1px solid  #e2e2e2;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+#lenis_win_min_btn[state='max_normal']{
     background: url(:/res/win_min.png) no-repeat center;
     background-color: rgb(247,247,247);
     border: none;
 }
-#lenis_win_min_btn[state='hover']{
+#lenis_win_min_btn[state='max_hover']{
     background: url(:/res/win_min.png) no-repeat center;
     background-color: LightGray;
     border: none;
 }
-#lenis_win_min_btn[state='press']{
+#lenis_win_min_btn[state='max_press']{
     background: url(:/res/win_min.png) no-repeat center;
     background-color: Grey;
     border: none;
@@ -497,7 +541,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #lenis_find_frame[state='normal'] {
     background-color: rgb(247,247,247);
     border-radius: 10px;
-    border:1px solid  #e2e2e2;
+    border: 1px solid  #e2e2e2;
 }
 #lenis_find_frame[state='max'] {
     background-color: rgb(247,247,247);
@@ -558,14 +602,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-size: 12pt;
 }
 
-#already_add_lb{
-    color:rgb(153,153,153);
-    font-size: 12px;
-    font-family: "Microsoft YaHei";
+/* 搜索成功界面 */
+#FindSuccessDialog{
+   background-color: #ffffff;
+   border: 1px solid  #e2e2e2;
 }
 
-#FindSuccessDlg{
-   background-color: #ffffff;
+#find_success_frame {
+    background-color: #ffffff;
+    border: 1px solid  #e2e2e2;
 }
 
 #name_lb{
@@ -597,8 +642,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    border-radius: 20px; /* 设置圆角 */
 }
 
+/* 申请界面 */
 #ApplyFriend{
-    border: 2px solid #f1f1f1;
+    border: 1px solid  #e2e2e2;
+    font-size: 14px;
+    background: #f7f7f8;
+}
+
+#ApplyFriendFrame{
+    border: 1px solid  #e2e2e2;
     font-size: 14px;
     background: #f7f7f8;
 }
@@ -609,7 +661,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 #scrollcontent{
-     background: #f7f7f8;
+    background: #f7f7f8;
 }
 
 #scrollcontent #apply_lb{
@@ -755,7 +807,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #apply_sure_wid #cancel_btn[state='normal']  {
     background: #f0f0f0;
     color: #2e2f30;
-    font-size: 16px; /* 设置字体大小 */
+    font-size: 14px; /* 设置字体大小 */
     font-family: "Microsoft YaHei"; /* 设置字体 */
     border-radius: 20px; /* 设置圆角 */
 }
@@ -763,7 +815,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #apply_sure_wid #cancel_btn[state='hover'] {
     background: #d2d2d2;
     color: #2e2f30;
-    font-size: 16px; /* 设置字体大小 */
+    font-size: 14px; /* 设置字体大小 */
     font-family: "Microsoft YaHei"; /* 设置字体 */
     border-radius: 20px; /* 设置圆角 */
 }
@@ -771,9 +823,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #apply_sure_wid #cancel_btn[state='press'] {
     background: #c6c6c6;
     color: #2e2f30;
-    font-size: 16px; /* 设置字体大小 */
+    font-size: 14px; /* 设置字体大小 */
     font-family: "Microsoft YaHei"; /* 设置字体 */
     border-radius: 20px; /* 设置圆角 */
+}
+
+#already_add_lb{
+    color:rgb(153,153,153);
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
 }
 
 #con_user_list {
@@ -827,12 +885,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 #friend_apply_wid {
-    background-color: #f1f2f3;
-    border-bottom: 1px solid #ede9e7;
+    background: #ffffff;
+    border: 0.5px solid #ececec;
 }
 
 #apply_friend_list {
-    background-color: #f1f2f3;
+    background-color: #ffffff;
     border-left: 1px solid #ede9e7;
     border-top: none;
     border-right: none;
@@ -840,8 +898,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 ApplyFriendItem {
-    background-color: #f1f2f3;
-    border-bottom: 2px solid #dbd9d9;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dbd9d9;
 }
 
 ApplyFriendItem #user_chat_lb{

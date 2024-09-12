@@ -107,4 +107,22 @@ struct MessageInfo {
     QPixmap pixmap;  //文件和图片的缩略图
 };
 
+// 申请好友标签输入框最低长度
+const int MIN_APPLY_LABEL_ED_LEN = 40;
+
+const QString add_prefix = "添加标签 ";
+
+const int tip_offset = 5;
+
+// 测试用
+const std::vector<QString> strs =
+    {"Hello, World!",
+     "hellohellohellohellohello world !",
+     "爱你",
+     "hello world",
+     "HelloWorld"};
+const std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
+const std::vector<QString> names =
+    {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
+
 #endif // GLOBAL_H

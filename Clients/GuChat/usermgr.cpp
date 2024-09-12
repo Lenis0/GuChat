@@ -60,9 +60,9 @@ std::shared_ptr<UserInfo> UserMgr::GetUserInfo() {
 //     }
 // }
 
-// std::vector<std::shared_ptr<ApplyInfo>> UserMgr::GetApplyList() {
-//     return _apply_list;
-// }
+std::vector<std::shared_ptr<ApplyInfo>> UserMgr::GetApplyList() {
+    return _apply_list;
+}
 
 // void UserMgr::AddApplyList(std::shared_ptr<ApplyInfo> app) {
 //     _apply_list.push_back(app);

@@ -3,10 +3,12 @@
 #include <QWheelEvent>
 #include "adduseritem.h"
 #include "customedit.h"
+#include "findsuccessdialog.h"
 #include "tcpmgr.h"
 
+// 初始化列表的顺序应该是按照成员声明顺序初始化
 SearchList::SearchList(QWidget* parent):
-    QListWidget(parent), _find_dlg(nullptr), _search_edit(nullptr), _send_pending(false) {
+    QListWidget(parent), _send_pending(false), _find_dlg(nullptr), _search_edit(nullptr) {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     // 安装事件过滤器
@@ -74,14 +76,15 @@ void SearchList::waitPending(bool pending) {
 }
 
 void SearchList::addTipItem() {
-    // auto* invalid_item = new QWidget();
-    // QListWidgetItem* item_tmp = new QListWidgetItem;
-    // //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-    // item_tmp->setSizeHint(QSize(250, 10));
-    // this->addItem(item_tmp);
-    // invalid_item->setObjectName("invalid_item");
-    // this->setItemWidget(item_tmp, invalid_item);
-    // item_tmp->setFlags(item_tmp->flags() & ~Qt::ItemIsSelectable);
+    auto* invalid_item = new ListItemBase();
+    invalid_item->SetItemType(ListItemType::INVALID_ITEM);
+    QListWidgetItem* item_tmp = new QListWidgetItem;
+    //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+    item_tmp->setSizeHint(QSize(250, 20));
+    this->addItem(item_tmp);
+    invalid_item->setObjectName("invalid_item");
+    this->setItemWidget(item_tmp, invalid_item);
+    item_tmp->setFlags(item_tmp->flags() & ~Qt::ItemIsSelectable);
 
     auto* add_user_item = new AddUserItem();
     QListWidgetItem* item = new QListWidgetItem;
@@ -107,7 +110,17 @@ void SearchList::slot_item_clicked(QListWidgetItem* item) {
 
     auto itemType = customItem->GetItemType();
     if (itemType == ListItemType::INVALID_ITEM) {
-        qDebug() << "slot invalid item clicked ";
+        qDebug() << "测试 ";
+        _find_dlg = std::make_shared<FindSuccessDialog>(this);
+        // int uid, QString name, QString nickname, QString desc, int sex, QString icon
+        auto si = std::make_shared<SearchInfo>(0,
+                                               "咕咕",
+                                               "gugu",
+                                               "hello , my friend!",
+                                               0,
+                                               ":/static/gugu.jpg");
+        std::dynamic_pointer_cast<FindSuccessDialog>(_find_dlg)->SetSearchInfo(si);
+        _find_dlg->show();
         return;
     }
 

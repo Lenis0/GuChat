@@ -12,6 +12,10 @@ CONFIG += c++17
 
 SOURCES += \
     adduseritem.cpp \
+    applyfriend.cpp \
+    applyfrienditem.cpp \
+    applyfriendlist.cpp \
+    applyfriendpage.cpp \
     bubbleframe.cpp \
     chatdialog.cpp \
     chatitembase.cpp \
@@ -20,9 +24,15 @@ SOURCES += \
     chatuserlist.cpp \
     chatview.cpp \
     clickablelabel.cpp \
+    clickedoncelabel.cpp \
+    contactuserlist.cpp \
+    conuseritem.cpp \
     customedit.cpp \
     finddialog.cpp \
+    findsuccessdialog.cpp \
+    friendlabel.cpp \
     global.cpp \
+    grouptipitem.cpp \
     httpmgr.cpp \
     listitembase.cpp \
     loadingdialog.cpp \
@@ -46,6 +56,10 @@ SOURCES += \
 
 HEADERS += \
     adduseritem.h \
+    applyfriend.h \
+    applyfrienditem.h \
+    applyfriendlist.h \
+    applyfriendpage.h \
     bubbleframe.h \
     chatdialog.h \
     chatitembase.h \
@@ -54,9 +68,15 @@ HEADERS += \
     chatuserlist.h \
     chatview.h \
     clickablelabel.h \
+    clickedoncelabel.h \
+    contactuserlist.h \
+    conuseritem.h \
     customedit.h \
     finddialog.h \
+    findsuccessdialog.h \
+    friendlabel.h \
     global.h \
+    grouptipitem.h \
     httpmgr.h \
     listitembase.h \
     loadingdialog.h \
@@ -80,10 +100,17 @@ HEADERS += \
 
 FORMS += \
     adduseritem.ui \
+    applyfriend.ui \
+    applyfrienditem.ui \
+    applyfriendpage.ui \
     chatdialog.ui \
     chatpage.ui \
     chatuseritemwidget.ui \
+    conuseritem.ui \
     finddialog.ui \
+    findsuccessdialog.ui \
+    friendlabel.ui \
+    grouptipitem.ui \
     loadingdialog.ui \
     logindialog.ui \
     mainwindow.ui \
@@ -104,6 +131,7 @@ DISTFILES += \
 
 # 在pro中添加拷贝脚本将配置也拷贝到bin目录
 CONFIG(debug, debug | release) {
+    message("debug mode")
     # 指定要拷贝的文件目录为工程目录下release目录下的所有dll、lib文件，例如工程目录在D:\QT\Test
     # PWD就为D:/QT/Test，DllFile = D:/QT/Test/release/*.dll
     TargetConfig = $${PWD}/config.ini

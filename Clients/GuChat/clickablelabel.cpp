@@ -43,7 +43,7 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent* event) {
             repolish(this);
             update();
         }
-        emit sig_clicked();
+        emit sig_clicked(this->text(), _cur_state);
         return;
     }
     // 调用基类的mouseReleaseEvent以保证正常的事件处理
@@ -107,4 +107,23 @@ void ClickableLabel::SetState(QString normal,
 
 ClickLabelState ClickableLabel::GetCurState() {
     return _cur_state;
+}
+
+bool ClickableLabel::SetCurState(ClickLabelState state) {
+    _cur_state = state;
+    if (_cur_state == ClickLabelState::Normal) {
+        setProperty("state", _normal);
+        repolish(this);
+    } else if (_cur_state == ClickLabelState::Selected) {
+        setProperty("state", _selected);
+        repolish(this);
+    }
+
+    return true;
+}
+
+void ClickableLabel::ResetNormalState() {
+    _cur_state = ClickLabelState::Normal;
+    setProperty("state", _normal);
+    repolish(this);
 }

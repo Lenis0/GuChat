@@ -23,7 +23,7 @@ public:
     std::shared_ptr<UserInfo> GetUserInfo();
     // void AppendApplyList(QJsonArray array);
     // void AppendFriendList(QJsonArray array);
-    // std::vector<std::shared_ptr<ApplyInfo>> GetApplyList();
+    std::vector<std::shared_ptr<ApplyInfo>> GetApplyList();
     // void AddApplyList(std::shared_ptr<ApplyInfo> app);
     // bool AlreadyApply(int uid);
     // std::vector<std::shared_ptr<FriendInfo>> GetChatListPerPage();
@@ -41,7 +41,7 @@ public:
 private:
     UserMgr();
     std::shared_ptr<UserInfo> _user_info;
-    // std::vector<std::shared_ptr<ApplyInfo>> _apply_list;
+    std::vector<std::shared_ptr<ApplyInfo>> _apply_list;
     // std::vector<std::shared_ptr<FriendInfo>> _friend_list;
     // QMap<int, std::shared_ptr<FriendInfo>> _friend_map;
     QString _token;

@@ -9,7 +9,7 @@
 
 ChatDialog::ChatDialog(QWidget* parent):
     QDialog(parent), ui(new Ui::ChatDialog), _mode(ChatUIMode::ChatMode),
-    _state(ChatUIMode::ChatMode), _b_loading(false) {
+    _state(ChatUIMode::ChatMode), _b_loading(false),_last_widget(nullptr) {
     ui->setupUi(this);
     ui->add_btn->SetState("normal", "hover", "press");
 
@@ -89,16 +89,28 @@ ChatDialog::ChatDialog(QWidget* parent):
     connect(ui->side_chat_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_chat);
     connect(ui->side_contact_lb, &StateWidget::sig_clicked, this, &ChatDialog::slot_side_contact);
     ui->side_chat_lb->SetSelected(true); //设置聊天label选中状态
+
+    //设置中心部件为chatpage
+    ui->stackedWidget->setCurrentWidget(ui->chat_page);
+
+    // //连接加载联系人的信号和槽函数
+    // connect(ui->con_user_list, &ContactUserList::sig_loading_contact_user,
+    //         this, &ChatDialog::slot_loading_contact_user);
+
+    //连接联系人页面点击好友申请条目的信号
+    connect(ui->con_user_list, &ContactUserList::sig_switch_apply_friend_page,
+            this,&ChatDialog::slot_switch_apply_friend_page);
 }
 
 // 测试
-std::vector<QString> strs = {"Hello, World!",
-                             "hellohellohellohellohello world !",
-                             "爱你",
-                             "hello world",
-                             "HelloWorld"};
-std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
-std::vector<QString> names = {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
+// std::vector<QString> strs = {"Hello, World!",
+//                              "hellohellohellohellohello world !",
+//                              "爱你",
+//                              "hello world",
+//                              "HelloWorld"};
+// std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
+// std::vector<QString> names = {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
+
 void ChatDialog::AddChatUserList() {
     // 创建QListWidgetItem，并设置自定义的widget
     for (int i = 0; i < 13; i++) {
@@ -237,4 +249,10 @@ void ChatDialog::slot_open_find_dlg() {
     _find_dlg = std::make_shared<FindDialog>(ui->search_edit->text());
     _find_dlg->show();
     ui->search_edit->clear();
+}
+
+void ChatDialog::slot_switch_apply_friend_page() {
+    qDebug()<<"receive switch apply friend page sig";
+    _last_widget = ui->friend_apply_page;
+    ui->stackedWidget->setCurrentWidget(ui->friend_apply_page);
 }

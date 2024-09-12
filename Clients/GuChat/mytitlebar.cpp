@@ -5,9 +5,9 @@ MyTitleBar::MyTitleBar(QWidget* parent):
     QWidget(parent), ui(new Ui::MyTitleBar), _win_state(WinState::WinNormal) {
     ui->setupUi(this);
 
-    ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
+    ui->lenis_win_min_btn->SetState("normal_normal", "normal_hover", "normal_press");
     ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
-    ui->lenis_win_min_btn->SetState("normal", "hover", "press");
+    ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
 }
 
 void MyTitleBar::setTitle(QString title) {
@@ -17,10 +17,12 @@ void MyTitleBar::setTitle(QString title) {
 void MyTitleBar::switchWinState() {
     if (_win_state == WinState::WinNormal) {
         _win_state = WinState::WinMax;
+        ui->lenis_win_min_btn->SetState("max_normal", "max_hover", "max_press");
         ui->lenis_win_max_btn->SetState("max_normal", "max_hover", "max_press");
         ui->lenis_win_close_btn->SetState("max_normal", "max_hover", "max_press");
     } else if (_win_state == WinState::WinMax) {
         _win_state = WinState::WinNormal;
+        ui->lenis_win_min_btn->SetState("normal_normal", "normal_hover", "normal_press");
         ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
         ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
     }
@@ -126,11 +128,13 @@ void MyTitleBar::on_lenis_win_close_btn_clicked() {
 void MyTitleBar::on_lenis_win_max_btn_clicked() {
     if (_win_state == WinState::WinNormal) {
         _win_state = WinState::WinMax;
+        ui->lenis_win_min_btn->SetState("max_normal", "max_hover", "max_press");
         ui->lenis_win_max_btn->SetState("max_normal", "max_hover", "max_press");
         ui->lenis_win_close_btn->SetState("max_normal", "max_hover", "max_press");
         emit sig_switch_win_max(true);
     } else if (_win_state == WinState::WinMax) {
         _win_state = WinState::WinNormal;
+        ui->lenis_win_min_btn->SetState("normal_normal", "normal_hover", "normal_press");
         ui->lenis_win_max_btn->SetState("normal_normal", "normal_hover", "normal_press");
         ui->lenis_win_close_btn->SetState("normal_normal", "normal_hover", "normal_press");
         emit sig_switch_win_max(false);

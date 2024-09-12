@@ -44,6 +44,7 @@ private slots:
     void slot_text_focus_out();
     void slot_text_changed(const QString& str);
     void slot_open_find_dlg();
+    void slot_switch_apply_friend_page();
 };
 
 #endif // CHATDIALOG_H

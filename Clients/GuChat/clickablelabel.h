@@ -18,8 +18,9 @@ public:
                   QString select,
                   QString select_hover,
                   QString select_press);
-
     ClickLabelState GetCurState();
+    bool SetCurState(ClickLabelState state);
+    void ResetNormalState();
 
 private:
     QString _normal;
@@ -33,7 +34,7 @@ private:
     ClickLabelState _cur_state;
 
 signals:
-    void sig_clicked(void);
+    void sig_clicked(QString, ClickLabelState);
 };
 
 #endif // CLICKABLELABEL_H
