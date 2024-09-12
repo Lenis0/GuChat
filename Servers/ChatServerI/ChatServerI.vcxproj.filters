@@ -48,6 +48,18 @@
     <ClCompile Include="LogicSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ChatGrpcClient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="message.grpc.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="message.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatServiceImpl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsioIOContextPool.h">
@@ -89,8 +101,21 @@
     <ClInclude Include="data.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ChatGrpcClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="message.grpc.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="message.pb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatServiceImpl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />
+    <None Include="message.proto" />
   </ItemGroup>
 </Project>

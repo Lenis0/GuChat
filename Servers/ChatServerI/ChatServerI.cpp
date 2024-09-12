@@ -18,7 +18,7 @@ int main() {
 			io_context.stop();
 			pool->Stop();
 		});
-		auto port_str = cfg["ChatServerI"]["Port"];
+		auto port_str = cfg["SelfServer"]["Port"];
 		CServer s(io_context, atoi(port_str.c_str()));
 		io_context.run();
 	} catch (std::exception& e) {

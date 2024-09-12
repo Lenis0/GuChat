@@ -1,20 +1,28 @@
-﻿// ChatServerII.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
+﻿#include "LogicSystem.h"
+#include "AsioIOContextPool.h"
+#include "CServer.h"
+#include "ConfigMgr.h"
+#include "const.h"
 
-#include <iostream>
+bool bstop = false;
+std::condition_variable cond_quit;
+std::mutex mutex_quit;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main() {
+	try {
+		auto& cfg = ConfigMgr::Inst();
+		auto pool = AsioIOContextPool::GetInstance();
+		boost::asio::io_context  io_context;
+		boost::asio::signal_set signals(io_context, SIGINT, SIGTERM);
+		signals.async_wait([&io_context, pool](auto, auto) {
+			io_context.stop();
+			pool->Stop();
+		});
+		auto port_str = cfg["SelfServer"]["Port"];
+		CServer s(io_context, atoi(port_str.c_str()));
+		io_context.run();
+	} catch (std::exception& e) {
+		std::cerr << "Exception: " << e.what() << std::endl;
+	}
+
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
