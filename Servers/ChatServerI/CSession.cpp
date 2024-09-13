@@ -2,6 +2,8 @@
 #include <iostream>
 #include "LogicSystem.h"
 #include "CServer.h"
+#include <sstream>
+
 
 CSession::CSession(boost::asio::io_context& io_context, CServer* server):
 	_socket(io_context), _server(server), _b_close(false), _b_head_parse(false), _user_uid(0) {

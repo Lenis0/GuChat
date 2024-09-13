@@ -1,6 +1,8 @@
 #pragma once
 #include "Singleton.h"
 #include <unordered_map>
+#include <memory>
+#include <mutex>
 
 class CSession;
 class UserMgr: public Singleton<UserMgr> {

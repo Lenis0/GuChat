@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
             &TcpMgr::sig_swich_chat,
             this,
             &MainWindow::slot_switch_chat);
-    emit TcpMgr::GetInstance() -> sig_swich_chat();
+    // emit TcpMgr::GetInstance() -> sig_swich_chat(); // 模拟测试
 }
 
 MainWindow::~MainWindow() {

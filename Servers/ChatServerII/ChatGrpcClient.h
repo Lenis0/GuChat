@@ -4,8 +4,11 @@
 #include <grpcpp/grpcpp.h> 
 #include "message.grpc.pb.h"
 #include "message.pb.h"
+#include <memory>
 #include <atomic>
 #include <queue>
+#include <mutex>
+#include <condition_variable>
 #include <unordered_map>
 #include "data.h"
 #include <json/json.h>

@@ -125,7 +125,6 @@ void LoginDialog::initHttpHandlers() {
             switchWidgetEnable(true);
             return;
         }
-        showTip(true, tr("登录成功！"));
         ServerInfo si;
         si.Uid = jsonObj["uid"].toInt();
         si.Host = jsonObj["host"].toString();

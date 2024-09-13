@@ -2,7 +2,7 @@
 #include "CSession.h"
 #include "RedisMgr.h"
 
-UserMgr:: ~ UserMgr() {
+UserMgr:: ~UserMgr() {
 	_uid_to_session.clear();
 }
 

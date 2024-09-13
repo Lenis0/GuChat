@@ -13,14 +13,16 @@ CServer::~CServer() {
 	std::cout << "Server destruct listen on port : " << _port << std::endl;
 }
 
-void CServer::ClearSession(std::string uuid) {
-	if (_sessions.find(uuid) != _sessions.end()) {
-		UserMgr::GetInstance()->RemoveUserSession(_sessions[uuid]->GetUserId());
+void CServer::ClearSession(std::string session_id) {
+	if (_sessions.find(session_id) != _sessions.end()) {
+		// 清理本内存用户和Session的连接信息
+		UserMgr::GetInstance()->RemoveUserSession(_sessions[session_id]->GetUserId());
 	}
 
+	// 加局部作用域
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
-		_sessions.erase(uuid);
+		_sessions.erase(session_id);
 	}
 }
 

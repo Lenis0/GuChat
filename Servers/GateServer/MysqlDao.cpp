@@ -50,8 +50,8 @@ void MySqlPool::checkConnection() {
 			pool_.push(std::move(con));
 		});
 
-		// 与上次操作是否间隔5分钟 大于5分钟则会执行一次简单的操作保持连接
-		if (timestamp - con->_last_oper_time < 300) {
+		// 与上次操作是否间隔5秒 大于5秒则会执行一次简单的操作保持连接
+		if (timestamp - con->_last_oper_time < 5) {
 			continue;
 		}
 
@@ -59,7 +59,7 @@ void MySqlPool::checkConnection() {
 			std::unique_ptr<sql::Statement> stmt(con->_con->createStatement());
 			stmt->executeQuery("SELECT 1");
 			con->_last_oper_time = timestamp;
-			std::cout << "execute timer alive query , cur is " << timestamp << std::endl;
+			//std::cout << "execute timer alive query , cur is " << timestamp << std::endl;
 		} catch (sql::SQLException& e) {
 			std::cout << "Error keeping connection alive: " << e.what() << std::endl;
 			// 重新创建连接并替换旧的连接
