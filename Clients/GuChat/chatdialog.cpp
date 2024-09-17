@@ -1,15 +1,20 @@
 #include "chatdialog.h"
 #include <QAction>
+#include <QJsonDocument> // 解析Json
+#include <QJsonObject>   // Json对象
 #include <QMouseEvent>
 #include <QRandomGenerator>
 #include "chatuseritemwidget.h"
-#include "finddialog.h"
-#include "loadingdialog.h"
+#include "findfaildialog.h"
+#include "findsuccessdialog.h"
+#include "tcpmgr.h"
 #include "ui_chatdialog.h"
+#include "usermgr.h"
 
 ChatDialog::ChatDialog(QWidget* parent):
     QDialog(parent), ui(new Ui::ChatDialog), _mode(ChatUIMode::ChatMode),
-    _state(ChatUIMode::ChatMode), _b_loading(false),_last_widget(nullptr) {
+    _state(ChatUIMode::ChatMode), _b_loading(false), _last_widget(nullptr), _find_dlg(nullptr),
+    _findone_dlg(nullptr), _send_pending(false) {
     ui->setupUi(this);
     ui->add_btn->SetState("normal", "hover", "press");
 
@@ -98,8 +103,16 @@ ChatDialog::ChatDialog(QWidget* parent):
     //         this, &ChatDialog::slot_loading_contact_user);
 
     //连接联系人页面点击好友申请条目的信号
-    connect(ui->con_user_list, &ContactUserList::sig_switch_apply_friend_page,
-            this,&ChatDialog::slot_switch_apply_friend_page);
+    connect(ui->con_user_list,
+            &ContactUserList::sig_switch_apply_friend_page,
+            this,
+            &ChatDialog::slot_switch_apply_friend_page);
+
+    //连接搜索条目
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_user_search,
+            this,
+            &ChatDialog::slot_user_search);
 }
 
 // 测试
@@ -191,19 +204,33 @@ void ChatDialog::ClearLabelState(StateWidget* lb) {
     }
 }
 
+void ChatDialog::waitPending(bool pending) {
+    if (pending) {
+        _loadingDialog = new LoadingDialog(this);
+        _loadingDialog->setModal(true);
+        _loadingDialog->show();
+        _send_pending = pending;
+    } else {
+        _loadingDialog->hide();
+        _loadingDialog->deleteLater();
+        _send_pending = pending;
+    }
+}
+
 void ChatDialog::slot_loading_chat_user() {
     if (_b_loading) {
         return;
     }
 
     _b_loading = true;
-    LoadingDialog* loadingDialog = new LoadingDialog(this);
-    loadingDialog->setModal(true);
-    loadingDialog->show();
+    _loadingDialog = new LoadingDialog(this);
+    _loadingDialog->setModal(true);
+    _loadingDialog->show();
     // qDebug() << "add new data to list.....";
     this->AddChatUserList();
     // 加载完成后关闭对话框
-    loadingDialog->deleteLater();
+    _loadingDialog->hide();
+    _loadingDialog->deleteLater();
 
     _b_loading = false;
 }
@@ -252,7 +279,47 @@ void ChatDialog::slot_open_find_dlg() {
 }
 
 void ChatDialog::slot_switch_apply_friend_page() {
-    qDebug()<<"receive switch apply friend page sig";
+    qDebug() << "receive switch apply friend page sig";
     _last_widget = ui->friend_apply_page;
     ui->stackedWidget->setCurrentWidget(ui->friend_apply_page);
+}
+
+void ChatDialog::slot_user_search(std::shared_ptr<SearchInfo> si) {
+    waitPending(false);
+    if (si == nullptr) {
+        _findone_dlg = std::make_shared<FindFailDialog>(this);
+    } else {
+        //如果是自己，暂且先直接返回，以后看逻辑扩充
+        auto self_uid = UserMgr::GetInstance()->GetUid();
+        if (si->_uid == self_uid) {
+            return;
+        }
+        //此处分两种情况，一种是搜多到已经是自己的朋友了，一种是未添加好友
+        //查找是否已经是好友
+        // bool bExist = UserMgr::GetInstance()->CheckFriendById(si->_uid);
+        // if (bExist) {
+        //     //此处处理已经添加的好友，实现页面跳转
+        //     //跳转到聊天界面指定的item中
+        //     emit sig_jump_chat_item(si);
+        //     return;
+        // }
+        //此处先处理为添加的好友
+        _findone_dlg = std::make_shared<FindSuccessDialog>(this);
+        std::dynamic_pointer_cast<FindSuccessDialog>(_findone_dlg)->SetSearchInfo(si);
+    }
+    _findone_dlg->show();
+}
+
+void ChatDialog::on_add_btn_clicked() {
+    if (_send_pending) {
+        return;
+    }
+    waitPending(true);
+    auto search_str = ui->search_edit->text(); // uid和名称搜索
+    QJsonObject jsonObj;
+    jsonObj["search"] = search_str;
+    QJsonDocument doc(jsonObj);
+    QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+    emit TcpMgr::GetInstance() -> sig_send_data(ReqId::ID_SEARCH_USER_REQ, jsonData);
+    return;
 }

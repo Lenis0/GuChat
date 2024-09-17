@@ -134,8 +134,8 @@ bool ApplyFriend::eventFilter(QObject* obj, QEvent* event) {
 
 void ApplyFriend::SetSearchInfo(std::shared_ptr<SearchInfo> si) {
     _si = si;
-    // auto applyname = tr("我是") + UserMgr::GetInstance()->GetName(); UserInfo为null 没有数据
-    auto applyname = tr("我是") + "Lenis0"; // 测试用 待优化
+    auto applyname = tr("我是") + UserMgr::GetInstance()->GetName(); // UserInfo为null时会崩溃
+    // auto applyname = tr("我是") + "Lenis0"; // 测试用 待优化
     auto bakname = si->_name;
     ui->name_ed->setText(applyname);
     ui->back_ed->setText(bakname);
@@ -482,34 +482,33 @@ void ApplyFriend::SlotAddFirendLabelByClickTip(QString text) {
 }
 
 void ApplyFriend::SlotApplySure() {
-    // qDebug() << "Slot Apply Sure called";
-    // //发送请求逻辑
-    // QJsonObject jsonObj;
-    // auto uid = UserMgr::GetInstance()->GetUid();
-    // jsonObj["uid"] = uid;
-    // auto name = ui->name_ed->text();
-    // if (name.isEmpty()) {
-    //     name = ui->name_ed->placeholderText();
-    // }
+    qDebug() << "Slot Apply Sure called";
+    //发送请求逻辑
+    QJsonObject jsonObj;
+    auto uid = UserMgr::GetInstance()->GetUid();
+    jsonObj["uid"] = uid;
+    auto name = ui->name_ed->text();
+    if (name.isEmpty()) {
+        name = ui->name_ed->placeholderText();
+    }
 
-    // jsonObj["applyname"] = name;
+    jsonObj["applyname"] = name;
 
-    // auto bakname = ui->back_ed->text();
-    // if (bakname.isEmpty()) {
-    //     bakname = ui->back_ed->placeholderText();
-    // }
+    auto bakname = ui->back_ed->text();
+    if (bakname.isEmpty()) {
+        bakname = ui->back_ed->placeholderText();
+    }
 
-    // jsonObj["bakname"] = bakname;
-    // jsonObj["touid"] = _si->_uid;
+    jsonObj["bakname"] = bakname;
+    jsonObj["touid"] = _si->_uid;
 
-    // QJsonDocument doc(jsonObj);
-    // QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+    QJsonDocument doc(jsonObj);
+    QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
 
-    // //发送tcp请求给chat server
-    // emit TcpMgr::GetInstance() -> sig_send_data(ReqId::ID_ADD_FRIEND_REQ, jsonData);
-    // this->hide();
-    // deleteLater();
-    qDebug() << "Slot Apply Sure";
+    //发送tcp请求给chat server
+    emit TcpMgr::GetInstance() -> sig_send_data(ReqId::ID_ADD_FRIEND_REQ, jsonData);
+    this->hide();
+    deleteLater();
 }
 
 void ApplyFriend::SlotApplyCancel() {

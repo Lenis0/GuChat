@@ -834,6 +834,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-family: "Microsoft YaHei";
 }
 
+/* 联系人列表 */
 #con_user_list {
     background-color: rgb(247,247,248);
     border: none;
@@ -855,7 +856,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     border: none;
     outline: none;
 }
-
 
 #GroupTipItem {
     background-color: #eaeaea;
@@ -884,6 +884,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     font-weight: normal;
 }
 
+/* 好友申请列表 */
 #friend_apply_wid {
     background: #ffffff;
     border: 0.5px solid #ececec;
@@ -942,9 +943,17 @@ ApplyFriendItem #addBtn[state='press'] {
     border-image: url(:/res/red_point.png);
 }
 
+/* 搜索失败界面 */
 #FindFailDlg{
-   background-color: #ffffff;
+    background-color: #ffffff;
+    border: 1px solid  #e2e2e2;
 }
+
+#find_fail_frame {
+    background-color: #ffffff;
+    border: 1px solid  #e2e2e2;
+}
+
 
 #fail_tip, #fail_tip2 {
     font-size: 14px;

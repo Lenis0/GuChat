@@ -12,7 +12,7 @@ public:
     void SetState(QString nomal, QString hover, QString press);
 
 protected:
-    void enterEvent(QEnterEvent* event);             // 鼠标进入
+    void enterEvent(QEnterEvent* event);        // 鼠标进入
     void leaveEvent(QEvent* event);             // 鼠标离开
     void mousePressEvent(QMouseEvent* event);   // 鼠标按下
     void mouseReleaseEvent(QMouseEvent* event); // 鼠标释放

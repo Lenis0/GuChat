@@ -29,6 +29,7 @@ SOURCES += \
     conuseritem.cpp \
     customedit.cpp \
     finddialog.cpp \
+    findfaildialog.cpp \
     findsuccessdialog.cpp \
     friendlabel.cpp \
     global.cpp \
@@ -73,6 +74,7 @@ HEADERS += \
     conuseritem.h \
     customedit.h \
     finddialog.h \
+    findfaildialog.h \
     findsuccessdialog.h \
     friendlabel.h \
     global.h \
@@ -108,6 +110,7 @@ FORMS += \
     chatuseritemwidget.ui \
     conuseritem.ui \
     finddialog.ui \
+    findfaildialog.ui \
     findsuccessdialog.ui \
     friendlabel.ui \
     grouptipitem.ui \

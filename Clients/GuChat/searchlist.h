@@ -18,15 +18,11 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-    void waitPending(bool pending = true); // 加好友时的阻塞
-    bool _send_pending;
     void addTipItem(); // 列表提示
     std::shared_ptr<QDialog> _find_dlg;
     QWidget* _search_edit;
-    LoadingDialog* _loadingDialog;
 private slots:
     void slot_item_clicked(QListWidgetItem* item);
-    void slot_user_search(std::shared_ptr<SearchInfo> si);
 signals:
     void sig_jump_chat_item(std::shared_ptr<SearchInfo> si);
     void sig_open_find_dlg();
