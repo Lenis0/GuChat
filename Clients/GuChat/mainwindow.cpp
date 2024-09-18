@@ -85,15 +85,15 @@ void MainWindow::slot_reset_switch_login(QString user) {
 }
 
 void MainWindow::slot_switch_chat() {
-    this->setMinimumSize(QSize(1280, 720));
-    this->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-    QRect screenRect = QGuiApplication::primaryScreen()->geometry();
-    this->move((screenRect.width() - this->width()) / 2,
-                    (screenRect.height() - this->height()) / 4);
     _chat_dlg = new ChatDialog();
     _chat_dlg->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     setCentralWidget(_chat_dlg);
     _login_dlg->hide();
     _chat_dlg->show();
+    this->setMinimumSize(QSize(1280, 720));
+    this->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    QRect screenRect = QGuiApplication::primaryScreen()->geometry();
+    this->move((screenRect.width() - this->width()) / 2,
+                    (screenRect.height() - this->height()) / 4);
     this->setFocus();
 }

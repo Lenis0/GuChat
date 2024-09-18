@@ -1,5 +1,7 @@
 #include "applyfriend.h"
 #include <QGraphicsDropShadowEffect>
+#include <QJsonDocument> // 解析Json
+#include <QJsonObject>   // Json对象
 #include <QScrollBar>
 #include "tcpmgr.h"
 #include "ui_applyfriend.h"
@@ -494,12 +496,12 @@ void ApplyFriend::SlotApplySure() {
 
     jsonObj["applyname"] = name;
 
-    auto bakname = ui->back_ed->text();
-    if (bakname.isEmpty()) {
-        bakname = ui->back_ed->placeholderText();
+    auto backname = ui->back_ed->text();
+    if (backname.isEmpty()) {
+        backname = ui->back_ed->placeholderText();
     }
 
-    jsonObj["bakname"] = bakname;
+    jsonObj["backname"] = backname;
     jsonObj["touid"] = _si->_uid;
 
     QJsonDocument doc(jsonObj);

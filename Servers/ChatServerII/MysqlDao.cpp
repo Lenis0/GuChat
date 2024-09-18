@@ -269,6 +269,41 @@ bool MysqlDao::CheckPasswd(const std::string& name, const std::string& pwd, User
 	}
 }
 
+bool MysqlDao::AddFriendApply(const int& from, const int& to) {
+	auto con = pool_->getConnection();
+	if (con == nullptr) {
+		return false;
+	}
+
+	Defer defer([this, &con]() {
+		pool_->reclaimConnection(std::move(con));
+	});
+
+	try {
+		// 准备SQL语句
+		// 直接回车 MysqlConnector提供的一种语义 用双引号继续拼接
+		// ON DUPLICATE KEY 两个联合起来产生冲突了 那么采用更新的方式 更新表
+		std::unique_ptr<sql::PreparedStatement> pstmt(con->_con->prepareStatement("INSERT INTO friend_apply (from_uid, to_uid) values (?,?) "
+			"ON DUPLICATE KEY UPDATE from_uid = from_uid, to_uid = to_uid"));
+		pstmt->setInt(1, from); // from id
+		pstmt->setInt(2, to);
+		// 执行更新
+		int rowAffected = pstmt->executeUpdate();
+		if (rowAffected < 0) {
+			return false;
+		}
+		return true;
+	} catch (sql::SQLException& e) {
+		std::cerr << "SQLException: " << e.what();
+		std::cerr << " (MySQL error code: " << e.getErrorCode();
+		std::cerr << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+		return false;
+	}
+
+	return true;
+
+}
+
 std::shared_ptr<UserInfo> MysqlDao::GetUser(int uid) {
 	auto con = pool_->getConnection();
 	if (con == nullptr) {
