@@ -7,7 +7,7 @@ ApplyFriendItem::ApplyFriendItem(QWidget* parent):
     SetItemType(ListItemType::APPLY_FRIEND_ITEM);
     ui->addBtn->SetState("normal", "hover", "press");
     ui->addBtn->hide();
-    connect(ui->addBtn, &MyClickedBtn::clicked, [this]() {
+    connect(ui->addBtn, &MyClickedBtn::clicked, this, [this]() {
         emit this->sig_auth_friend(_apply_info);
     });
 }

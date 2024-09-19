@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QRandomGenerator>
 #include <QStyleOption>
+#include "authfriend.h"
 #include "tcpmgr.h"
 #include "ui_applyfriendpage.h"
 #include "userdata.h"
@@ -45,14 +46,15 @@ void ApplyFriendPage::AddNewApply(std::shared_ptr<AddFriendApply> apply) {
     ui->apply_friend_list->setItemWidget(item, apply_item);
     apply_item->ShowAddBtn(true);
     //收到审核好友信号
-    // connect(apply_item,
-    //         &ApplyFriendItem::sig_auth_friend,
-    //         [this](std::shared_ptr<ApplyInfo> apply_info) {
-    //             auto* authFriend = new AuthenFriend(this);
-    //             authFriend->setModal(true);
-    //             authFriend->SetApplyInfo(apply_info);
-    //             authFriend->show();
-    //         });
+    connect(apply_item,
+            &ApplyFriendItem::sig_auth_friend,
+            this,
+            [this](std::shared_ptr<ApplyInfo> apply_info) {
+                auto* authFriend = new AuthFriend(this);
+                authFriend->setModal(true);
+                authFriend->SetApplyInfo(apply_info);
+                authFriend->show();
+            });
 }
 
 void ApplyFriendPage::paintEvent(QPaintEvent* event) {
@@ -86,15 +88,16 @@ void ApplyFriendPage::loadApplyList() {
             _unauth_items[uid] = apply_item;
         }
 
-        //收到审核好友信号
-        // connect(apply_item,
-        //         &ApplyFriendItem::sig_auth_friend,
-        //         [this](std::shared_ptr<ApplyInfo> apply_info) {
-        //             auto* authFriend = new AuthenFriend(this);
-        //             authFriend->setModal(true);
-        //             authFriend->SetApplyInfo(apply_info);
-        //             authFriend->show();
-        //         });
+        // 收到审核好友信号
+        connect(apply_item,
+                &ApplyFriendItem::sig_auth_friend,
+                this,
+                [this](std::shared_ptr<ApplyInfo> apply_info) {
+                    auto* authFriend = new AuthFriend(this);
+                    authFriend->setModal(true);
+                    authFriend->SetApplyInfo(apply_info);
+                    authFriend->show();
+                });
     }
 
     // 模拟假数据，创建QListWidgetItem，并设置自定义的widget
@@ -120,14 +123,15 @@ void ApplyFriendPage::loadApplyList() {
         ui->apply_friend_list->addItem(item);
         ui->apply_friend_list->setItemWidget(item, apply_item);
         //收到审核好友信号
-        // connect(apply_item,
-        //         &ApplyFriendItem::sig_auth_friend,
-        //         [this](std::shared_ptr<ApplyInfo> apply_info) {
-        //             auto* authFriend = new AuthenFriend(this);
-        //             authFriend->setModal(true);
-        //             authFriend->SetApplyInfo(apply_info);
-        //             authFriend->show();
-        //         });
+        connect(apply_item,
+                &ApplyFriendItem::sig_auth_friend,
+                this,
+                [this](std::shared_ptr<ApplyInfo> apply_info) {
+                    auto* authFriend = new AuthFriend(this);
+                    authFriend->setModal(true);
+                    authFriend->SetApplyInfo(apply_info);
+                    authFriend->show();
+                });
     }
 }
 

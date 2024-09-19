@@ -53,6 +53,8 @@ private slots:
     void slot_open_find_dlg();
     void slot_switch_apply_friend_page();
     void slot_user_search(std::shared_ptr<SearchInfo> si);
+    void slot_apply_friend(std::shared_ptr<AddFriendApply> apply);
+
     void on_add_btn_clicked();
 };
 

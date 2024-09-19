@@ -28,8 +28,8 @@ Status ChatServiceImpl::NotifyAddFriend(ServerContext* context, const AddFriendR
 	Json::Value  rtvalue;
 	rtvalue["error"] = ErrorCodes::Success;
 	rtvalue["applyuid"] = request->applyuid();
+	rtvalue["applydesc"] = request->desc();
 	rtvalue["name"] = request->name();
-	rtvalue["desc"] = request->desc();
 	rtvalue["icon"] = request->icon();
 	rtvalue["sex"] = request->sex();
 	rtvalue["nickname"] = request->nickname();

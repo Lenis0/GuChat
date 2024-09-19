@@ -138,11 +138,11 @@ void CSession::AsyncReadHead(int total_len) {
 			short msg_id = 0;
 			memcpy(&msg_id, _recv_head_node->_data, HEAD_ID_LEN);
 			// 网络字节序转化为本地字节序
-			 //ntohs network to host ,s代表unsigned short型
-			 //在网络传输中，一般要求是大端，而inter处理器是小端，
-			 //network to host理解为大端转小端，
-			 //而host to network 理解为小端转大端，
-			 //本质上大端小端的转化算法是一致的，没有区别
+			//ntohs network to host ,s代表unsigned short型
+			//在网络传输中，一般要求是大端，而inter处理器是小端，
+			//network to host理解为大端转小端，
+			//而host to network 理解为小端转大端，
+			//本质上大端小端的转化算法是一致的，没有区别
 			msg_id = boost::asio::detail::socket_ops::network_to_host_short(msg_id);
 			std::cout << "msg_id is " << msg_id << std::endl;
 			//id非法
@@ -177,7 +177,7 @@ void CSession::HandleWrite(const boost::system::error_code& error, std::shared_p
 	try {
 		if (!error) {
 			std::lock_guard<std::mutex> lock(_send_lock);
-			//cout << "send data " << _send_que.front()->_data+HEAD_LENGTH << endl;
+			//std::cout << "send data " << _send_que.front()->_data + HEAD_ID_LEN + HEAD_DATA_LEN << std::endl;
 			_send_que.pop();
 			if (!_send_que.empty()) {
 				auto& msgnode = _send_que.front();

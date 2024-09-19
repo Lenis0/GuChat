@@ -113,6 +113,12 @@ ChatDialog::ChatDialog(QWidget* parent):
             &TcpMgr::sig_user_search,
             this,
             &ChatDialog::slot_user_search);
+
+    //连接申请添加好友信号
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_friend_apply,
+            this,
+            &ChatDialog::slot_apply_friend);
 }
 
 // 测试
@@ -280,6 +286,8 @@ void ChatDialog::slot_open_find_dlg() {
 
 void ChatDialog::slot_switch_apply_friend_page() {
     qDebug() << "receive switch apply friend page sig";
+    ui->side_contact_lb->ShowRedPoint(false);
+    ui->con_user_list->ShowRedPoint(false);
     _last_widget = ui->friend_apply_page;
     ui->stackedWidget->setCurrentWidget(ui->friend_apply_page);
 }
@@ -310,12 +318,30 @@ void ChatDialog::slot_user_search(std::shared_ptr<SearchInfo> si) {
     _findone_dlg->show();
 }
 
+void ChatDialog::slot_apply_friend(std::shared_ptr<AddFriendApply> apply) {
+    qDebug() << "receive apply friend slot, applyuid is " << apply->_from_uid << " name is "
+             << apply->_name << " desc is " << apply->_desc;
+
+    bool b_already = UserMgr::GetInstance()->AlreadyApply(apply->_from_uid);
+    if (b_already) {
+        return;
+    }
+
+    UserMgr::GetInstance()->AddApplyList(std::make_shared<ApplyInfo>(apply));
+    ui->side_contact_lb->ShowRedPoint(true);
+    ui->con_user_list->ShowRedPoint(true);
+    ui->friend_apply_page->AddNewApply(apply);
+}
+
 void ChatDialog::on_add_btn_clicked() {
     if (_send_pending) {
         return;
     }
-    waitPending(true);
     auto search_str = ui->search_edit->text(); // uid和名称搜索
+    if (search_str.isEmpty()) {
+        return;
+    }
+    waitPending(true);
     QJsonObject jsonObj;
     jsonObj["search"] = search_str;
     QJsonDocument doc(jsonObj);

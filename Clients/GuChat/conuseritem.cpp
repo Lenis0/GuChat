@@ -5,7 +5,7 @@ ConUserItem::ConUserItem(QWidget* parent): ListItemBase(parent), ui(new Ui::ConU
     ui->setupUi(this);
     SetItemType(ListItemType::CONTACT_USER_ITEM);
     ui->red_point->raise(); // 提升z坐标
-    ShowRedPoint(true);     // 测试
+    ShowRedPoint(false);    // 测试
 }
 
 ConUserItem::~ConUserItem() {

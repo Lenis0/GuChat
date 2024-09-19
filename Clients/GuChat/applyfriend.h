@@ -7,6 +7,7 @@
 #include "friendlabel.h"
 #include "global.h"
 #include "userdata.h"
+#include <memory>
 
 namespace Ui {
     class ApplyFriend;
@@ -27,7 +28,6 @@ public:
 private:
     Ui::ApplyFriend* ui;
     void resetLabels();
-
     //已经创建好的标签
     QMap<QString, ClickableLabel*> _add_labels;
     std::vector<QString> _add_label_keys;

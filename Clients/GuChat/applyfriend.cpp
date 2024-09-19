@@ -494,7 +494,7 @@ void ApplyFriend::SlotApplySure() {
         name = ui->name_ed->placeholderText();
     }
 
-    jsonObj["applyname"] = name;
+    jsonObj["applydesc"] = name;
 
     auto backname = ui->back_ed->text();
     if (backname.isEmpty()) {
