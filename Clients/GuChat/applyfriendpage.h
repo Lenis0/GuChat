@@ -29,7 +29,7 @@ private:
 public slots:
     void slot_auth_rsp(std::shared_ptr<AuthRsp>);
 signals:
-    void sig_show_search(bool);
+    void sig_focus_in_list();
 };
 
 #endif // APPLYFRIENDPAGE_H

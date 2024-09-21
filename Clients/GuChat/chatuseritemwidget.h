@@ -2,6 +2,8 @@
 #define CHATUSERITEMWIDGET_H
 
 #include "listitembase.h"
+#include "userdata.h"
+#include <memory>
 
 /******************************************************************************
  *
@@ -30,13 +32,19 @@ public:
         return QSize(250, 70); // 返回自定义的尺寸
     }
 
-    void SetInfo(QString name, QString head, QString msg);
+    // void SetInfo(QString name, QString head, QString msg);
+    void SetInfo(std::shared_ptr<UserInfo> user_info);
+    void SetInfo(std::shared_ptr<FriendInfo> friend_info);
+    void ShowRedPoint(bool bshow);
+    std::shared_ptr<UserInfo> GetUserInfo();
+    void updateLastMsg(std::vector<std::shared_ptr<TextChatData>> msgs);
 
 private:
     Ui::ChatUserItemWidget* ui;
-    QString _name;
-    QString _head;
-    QString _msg;
+    // QString _name;
+    // QString _head;
+    // QString _msg;
+    std::shared_ptr<UserInfo> _user_info;
 };
 
 #endif // CHATUSERITEMWIDGET_H

@@ -2,6 +2,7 @@
 #define CHATPAGE_H
 
 #include <QWidget>
+#include "userdata.h"
 
 /******************************************************************************
  *
@@ -23,6 +24,8 @@ class ChatPage: public QWidget {
 public:
     explicit ChatPage(QWidget* parent = nullptr);
     ~ChatPage();
+    void SetUserInfo(std::shared_ptr<UserInfo> user_info);
+    void AppendChatMsg(std::shared_ptr<TextChatData> msg);
 
 protected:
     // 因为我们继承了QWidget,我们想实现样式更新，需要重写paintEvent
@@ -30,6 +33,9 @@ protected:
 
 private:
     Ui::ChatPage* ui;
+
+    std::shared_ptr<UserInfo> _user_info;
+    QMap<QString, QWidget*>  _bubble_map;
 
 signals:
     void sig_focus_in_edit();

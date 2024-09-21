@@ -1,4 +1,5 @@
 #include "tcpmgr.h"
+#include "usermgr.h"
 
 TcpMgr::TcpMgr(): _host(""), _port(0), _b_recv_pending(false), _message_id(0), _message_len(0) {
     QObject::connect(&_socket, &QTcpSocket::connected, this, [&]() {
@@ -301,9 +302,42 @@ void TcpMgr::initHttpHandlers() {
         auto rsp = std::make_shared<AuthRsp>(uid, name, nickname, icon, sex);
         emit sig_auth_rsp(rsp);
 
-        qDebug() << "Auth Friend Success " ;
+        qDebug() << "Auth Friend Success ";
+    });
+    _handlers.insert(ID_NOTIFY_AUTH_FRIEND_REQ, [this](ReqId id, int len, QByteArray data) {
+        Q_UNUSED(len);
+        qDebug() << "handle id is " << id << " data is " << data;
+        // 将QByteArray转换为QJsonDocument
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
+        // 检查转换是否成功
+        if (jsonDoc.isNull()) {
+            qDebug() << "Failed to create QJsonDocument.";
+            return;
+        }
 
+        QJsonObject jsonObj = jsonDoc.object();
+        if (!jsonObj.contains("error")) {
+            int err = ErrorCodes::ERR_JSON;
+            qDebug() << "Notify Auth Friend Failed, err is " << err;
+            return;
+        }
+
+        int err = jsonObj["error"].toInt();
+        if (err != ErrorCodes::SUCCESS) {
+            qDebug() << "Notify Auth Friend Failed, err is " << err;
+            return;
+        }
+
+        int from_uid = jsonObj["fromuid"].toInt();
+        QString name = jsonObj["name"].toString();
+        QString nickname = jsonObj["nickname"].toString();
+        QString icon = jsonObj["icon"].toString();
+        int sex = jsonObj["sex"].toInt();
+
+        auto auth_info = std::make_shared<AuthInfo>(from_uid, name, nickname, icon, sex);
+
+        emit sig_add_auth_friend(auth_info);
     });
 }
 

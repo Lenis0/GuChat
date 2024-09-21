@@ -23,7 +23,7 @@ bool ApplyFriendList::eventFilter(QObject* watched, QEvent* event) {
 
     if (watched == this->viewport()) {
         if (event->type() == QEvent::MouseButtonPress) {
-            emit sig_show_search(false);
+            emit sig_focus_in_list();
         }
     }
 

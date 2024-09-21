@@ -52,6 +52,22 @@ void ChatView::prependChatItem(QWidget* item) {}
 
 void ChatView::insertChatItem(QWidget* before, QWidget* item) {}
 
+void ChatView::removeAllItem() {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(m_pScrollArea->widget()->layout());
+
+    int count = layout->count();
+
+    for (int i = 0; i < count - 1; ++i) {
+        QLayoutItem* item = layout->takeAt(0); // 始终从第一个控件开始删除
+        if (item) {
+            if (QWidget* widget = item->widget()) {
+                delete widget;
+            }
+            delete item;
+        }
+    }
+}
+
 bool ChatView::eventFilter(QObject* obj, QEvent* event) {
     // 大小为0说明内容没有超过滚动区 那么就隐藏滚动条
     if (event->type() == QEvent::Enter && obj == m_pScrollArea) {

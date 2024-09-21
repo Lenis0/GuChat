@@ -7,6 +7,7 @@
 #include "grouptipitem.h"
 #include "listitembase.h"
 #include "tcpmgr.h"
+#include "usermgr.h"
 
 ContactUserList::ContactUserList(QWidget* parent): QListWidget(parent), _add_friend_item(nullptr) {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -19,10 +20,10 @@ ContactUserList::ContactUserList(QWidget* parent): QListWidget(parent), _add_fri
     //连接点击的信号和槽
     connect(this, &QListWidget::itemClicked, this, &ContactUserList::slot_item_clicked);
     // //链接对端同意认证后通知的信号
-    // connect(TcpMgr::GetInstance().get(),
-    //         &TcpMgr::sig_add_auth_friend,
-    //         this,
-    //         &ContactUserList::slot_add_auth_firend);
+    connect(TcpMgr::GetInstance().get(),
+            &TcpMgr::sig_add_auth_friend,
+            this,
+            &ContactUserList::slot_add_auth_firend);
 
     //链接自己点击同意认证后界面刷新
     connect(TcpMgr::GetInstance().get(),
@@ -109,19 +110,19 @@ void ContactUserList::addContactUserList() {
     this->setItemWidget(_groupitem, groupCon);
     _groupitem->setFlags(_groupitem->flags() & ~Qt::ItemIsSelectable);
 
-    // //加载后端发送过来的好友列表
-    // auto con_list = UserMgr::GetInstance()->GetConListPerPage();
-    // for (auto& con_ele : con_list) {
-    //     auto* con_user_wid = new ConUserItem();
-    //     con_user_wid->SetInfo(con_ele->_uid, con_ele->_name, con_ele->_icon);
-    //     QListWidgetItem* item = new QListWidgetItem;
-    //     //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-    //     item->setSizeHint(con_user_wid->sizeHint());
-    //     this->addItem(item);
-    //     this->setItemWidget(item, con_user_wid);
-    // }
+    //加载后端发送过来的好友列表
+    auto con_list = UserMgr::GetInstance()->GetConListPerPage();
+    for (auto& con_ele : con_list) {
+        auto* con_user_wid = new ConUserItem();
+        con_user_wid->SetInfo(con_ele->_uid, con_ele->_name, con_ele->_icon);
+        QListWidgetItem* item = new QListWidgetItem;
+        //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+        item->setSizeHint(con_user_wid->sizeHint());
+        this->addItem(item);
+        this->setItemWidget(item, con_user_wid);
+    }
 
-    // UserMgr::GetInstance()->UpdateContactLoadedCount();
+    UserMgr::GetInstance()->UpdateContactLoadedCount();
 
     // 模拟列表， 创建QListWidgetItem，并设置自定义的widget
     for (int i = 0; i < 13; i++) {
@@ -180,30 +181,26 @@ void ContactUserList::slot_item_clicked(QListWidgetItem* item) {
     }
 }
 
-// void ContactUserList::slot_add_auth_firend(std::shared_ptr<AuthInfo> auth_info) {
-//     qDebug() << "slot add auth friend ";
-//     bool isFriend = UserMgr::GetInstance()->CheckFriendById(auth_info->_uid);
-//     if (isFriend) {
-//         return;
-//     }
-//     // 在 groupitem 之后插入新项
-//     int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
-//     int str_i = randomValue % strs.size();
-//     int head_i = randomValue % heads.size();
+void ContactUserList::slot_add_auth_firend(std::shared_ptr<AuthInfo> auth_info) {
+    qDebug() << "slot add auth friend ";
+    bool isFriend = UserMgr::GetInstance()->CheckFriendById(auth_info->_uid);
+    if (isFriend) {
+        return;
+    }
 
-//     auto* con_user_wid = new ConUserItem();
-//     con_user_wid->SetInfo(auth_info);
-//     QListWidgetItem* item = new QListWidgetItem;
-//     //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-//     item->setSizeHint(con_user_wid->sizeHint());
+    auto* con_user_wid = new ConUserItem();
+    con_user_wid->SetInfo(auth_info);
+    QListWidgetItem* item = new QListWidgetItem;
+    //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+    item->setSizeHint(con_user_wid->sizeHint());
 
-//     // 获取 groupitem 的索引
-//     int index = this->row(_groupitem);
-//     // 在 groupitem 之后插入新项
-//     this->insertItem(index + 1, item);
+    // 获取 groupitem 的索引
+    int index = this->row(_groupitem);
+    // 在 groupitem 之后插入新项
+    this->insertItem(index + 1, item);
 
-//     this->setItemWidget(item, con_user_wid);
-// }
+    this->setItemWidget(item, con_user_wid);
+}
 
 void ContactUserList::slot_auth_rsp(std::shared_ptr<AuthRsp> auth_rsp) {
     qDebug() << "slot auth rsp called";

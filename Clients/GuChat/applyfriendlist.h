@@ -14,7 +14,7 @@ protected:
 private slots:
 
 signals:
-    void sig_show_search(bool);
+    void sig_focus_in_list();
 };
 
 #endif // APPLYFRIENDLIST_H

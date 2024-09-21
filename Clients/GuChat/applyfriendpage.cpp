@@ -5,14 +5,14 @@
 #include "authfriend.h"
 #include "tcpmgr.h"
 #include "ui_applyfriendpage.h"
-#include "userdata.h"
+#include "usermgr.h"
 
 ApplyFriendPage::ApplyFriendPage(QWidget* parent): QWidget(parent), ui(new Ui::ApplyFriendPage) {
     ui->setupUi(this);
     connect(ui->apply_friend_list,
-            &ApplyFriendList::sig_show_search,
+            &ApplyFriendList::sig_focus_in_list,
             this,
-            &ApplyFriendPage::sig_show_search);
+            &ApplyFriendPage::sig_focus_in_list);
     loadApplyList();
     //接受tcp传递的authrsp信号处理
     connect(TcpMgr::GetInstance().get(),

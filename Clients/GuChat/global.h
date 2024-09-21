@@ -114,6 +114,7 @@ const QString add_prefix = "添加标签 ";
 
 const int tip_offset = 5;
 
+
 // 测试用
 const std::vector<QString> strs =
     {"Hello, World!",
@@ -124,5 +125,8 @@ const std::vector<QString> strs =
 const std::vector<QString> heads = {":/res/head_1.png", ":/res/head_2.jpg", ":/res/head_3.png"};
 const std::vector<QString> names =
     {"咕咕", "gugu", "golang", "cpp", "java", "nodejs", "python", "rust"};
+
+const int CHAT_COUNT_PER_PAGE = 13;
+
 
 #endif // GLOBAL_H

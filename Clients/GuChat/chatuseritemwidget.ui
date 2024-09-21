@@ -45,52 +45,66 @@
     <widget class="QWidget" name="icon_wid" native="true">
      <property name="minimumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>60</width>
+       <height>60</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>60</width>
+       <height>60</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="spacing">
-       <number>0</number>
+     <widget class="QLabel" name="icon_lb">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>45</width>
+        <height>45</height>
+       </rect>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
+      <property name="minimumSize">
+       <size>
+        <width>45</width>
+        <height>45</height>
+       </size>
       </property>
-      <property name="topMargin">
-       <number>0</number>
+      <property name="maximumSize">
+       <size>
+        <width>45</width>
+        <height>45</height>
+       </size>
       </property>
-      <property name="rightMargin">
-       <number>0</number>
+      <property name="text">
+       <string/>
       </property>
-      <property name="bottomMargin">
-       <number>0</number>
+     </widget>
+     <widget class="QLabel" name="red_point">
+      <property name="geometry">
+       <rect>
+        <x>27</x>
+        <y>2</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
       </property>
-      <item>
-       <widget class="QLabel" name="icon_lb">
-        <property name="minimumSize">
-         <size>
-          <width>45</width>
-          <height>45</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>45</width>
-          <height>45</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </widget>
    </item>
    <item>
